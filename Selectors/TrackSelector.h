@@ -8,28 +8,13 @@
 #include "Selectors/TrackCutFunctions.h"
 #include "D3PDReader/TrackD3PDObject.h"
 
-class TrackSelector : public ISelector {
-
-	// Index of cut functions
-public:
-	#ifndef __CINT__
-	typedef bool (*TrackCutFunction)(const xAOD::TEvent * p_event, TrackSelector* p_track_selector, int n, const std::vector<Double_t> *cut_parameters, const std::vector<TString> *cut_descriptors);
- 	std::map<TString, TrackCutFunction> cut_functions;
- 	#endif
+class TrackSelector : public IObjectSelector {
 
 	/*** Public Methods ***/
 public:
 	TrackSelector();
 	~TrackSelector();
 
-	// Apply selections to track i in D3PDReader::Event. Records cut decisions for later digestion.
-	bool Pass(int i);
-	
-	// External access to individual cut functions. Doesn't increment counters.
-	bool Pass(int i, TString p_cut_name);
-
-	// Call Pass on each Track in the event, skipping Track already removed in the overlap removal process.
-	void ClassifyObjects();
 
 	void SetTrackSelectorTool(Root::TTrackSelector *p_Track_selector_tool);
 

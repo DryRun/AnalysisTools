@@ -25,12 +25,41 @@
 #include "RootUtils/SimpleConfiguration.h"
 
 class IObjectSelector : public ISelector, public TObject {
+public:
+	enum ObjectName {
+		kElectron,
+		kMuon,
+		kTau,
+		kJet,
+		kW,
+		kZ,
+		kHiggs,
+		kElectronNeutrino,
+		kMuonNeutrino,
+		kTauNeutrino,
+		kAnyNeutrino,
+		kNoObjectName,
+		kTrack
+	};
 
-	ClassDef(IObjectSelector, 1);
+	enum ObjectFakeType {
+		kNumerator,
+		kDenominator,
+		kUnspecified
+	};
+
+	// Index of cut functions
+public:
+	#ifndef __CINT__
+	typedef bool (*CutFunction)(const xAOD::TEvent* p_event, IObjectSelector* p_track_selector, int n);
+ 	std::map<TString, CutFunction> cut_functions_;
+ 	#endif
 
 
 	/*** Public Methods ***/
 public:
+	ClassDef(IObjectSelector, 1);
+
 	// Basic
 	IObjectSelector();
 	~IObjectSelector();
@@ -90,19 +119,25 @@ public:
 	  * GetNGoodObjects
 	  * - Get current number of good electrons
 	  */
-	Int_t GetNGoodObjects();
+	inline int GetNGoodObjects() {
+		return n_good_objects_;
+	}
 
 	/**
 	  * GetGoodObjectMap
 	  * - Returns a std::map<Int_t, Bool_t> describing whether each object in the current event passed the cuts.
 	  */
-	std::map<Int_t, Bool_t>* GetGoodObjectMap();
+	inline std::map<Int_t, Bool_t>* GetGoodObjectMap() {
+		return &obj_pass_;
+	}
 
 	/**
 	  * GetGoodObjectList
 	  * - Returns a list of the indices of good objects in the current event
 	  */
-	std::vector<Int_t>* GetGoodObjectList();
+	std::vector<Int_t>* GetGoodObjectList() {
+		return &obj_good_;
+	}
 
 	/**
 	  * IsGood
@@ -118,15 +153,15 @@ public:
 	void UsePreselection(bool p_use_preselection);
 
 	inline void SetObjectFakeType(ObjectSelector::ObjectFakeType p_fake_type) {
-		m_object_fake_type_ = p_fake_type;
+		object_fake_type_ = p_fake_type;
 	}
 
 	inline ObjectSelector::ObjectFakeType GetObjectFakeType() {
-		return m_object_fake_type_;
+		return object_fake_type_;
 	}
 
 	inline ObjectSelector::ObjectName GetObjectName() {
-		return m_object_name;
+		return object_name_;
 	}
 
 	/*** Private Methods ***/
@@ -135,28 +170,28 @@ private:
 	/*** Public Members ***/
 public:
  	// Preselection things
- 	bool m_use_preselection;
- 	std::map<Int_t, Bool_t> *m_object_preselection; // Things to do once, e.g. object overlap removal.
+ 	bool use_preselection_;
+ 	std::map<Int_t, Bool_t> *object_preselection_; // Things to do once, e.g. object overlap removal.
 
  	// Map: object index : pass
- 	std::map<Int_t, Bool_t> m_obj_pass;
+ 	std::map<Int_t, Bool_t> obj_pass_;
 
  	// List of indices that pass
- 	std::vector<Int_t> m_obj_good;
+ 	std::vector<Int_t> obj_good_;
 
  	// Number of good electrons
- 	Int_t m_n_good_objects;
+ 	Int_t n_good_objects_;
 
 
  	/*** Protected Members ***/
 protected:
-	Bool_t m_fresh_event;
+	Bool_t fresh_event_;
  
- 	ObjectName m_object_name;
+ 	ObjectName object_name_;
 
- 	ObjectFakeType m_object_fake_type_;
+ 	ObjectFakeType object_fake_type_;
 
- 	std::map<int, int> m_truth_match_indices_;
+ 	std::map<int, int> truth_match_indices_;
 
 	ClassDef(ObjectSelector, 1);
 
