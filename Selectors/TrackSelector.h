@@ -4,9 +4,12 @@
 #include <TSystem.h>
 #include <TPython.h>
 
+#include "xAODTracking/TrackMeasurementValidationContainer.h"
+#include "xAODTracking/TrackParticle.h"
+#include "xAODTracking/TrackParticlexAODHelpers.h"
+
 #include "Selectors/IObjectSelector.h"
 #include "Selectors/TrackCutFunctions.h"
-#include "D3PDReader/TrackD3PDObject.h"
 
 class TrackSelector : public IObjectSelector {
 
@@ -15,14 +18,7 @@ public:
 	TrackSelector();
 	~TrackSelector();
 
-
-	void SetTrackSelectorTool(Root::TTrackSelector *p_Track_selector_tool);
-
 	void SetNewEvent();
-
-	void SetNewEvent(std::map<Int_t, Bool_t> *p_good_jet_list);
-
-	void SetNewEvent(std::map<Int_t, Bool_t> *p_object_preselection, std::map<Int_t, Bool_t> *p_good_jet_list);
 
 	/**
 	 * Sets the D3PDReader object, then calls Selector::LoadConfiguration.
@@ -37,15 +33,15 @@ public:
 	 * Get the TrackD3PDObject associated with this selector.
 	 * @return D3PDReader::TrackD3PDObject*
 	 */
-	D3PDReader::TrackD3PDObject* GetTrackCollection();
+	xAOD::TrackParticleContainer* GetTrackCollection();
 
 	/*** Public Members ***/
 public:
-	Root::TTrackSelector *m_Track_selector_tool;
-
- 	std::map<Int_t, Bool_t> *m_good_jet_list; // List of "looser" jets that pass overlap removal and cleaning.
-
- 	TrackCollection m_collection;
+	const xAOD::TrackParticleContainer * tracks_; //!
+	const xAOD::TruthParticleContainer * truth_particles_; //!
+	const xAOD::TruthVertexContainer * truth_vertices_; //!
+	const xAOD::TruthEventContainer * truth_events_; //!
+	const xAOD::TruthPileupEventContainer * truth_pileup_events_; //!
 
 	ClassDef(TrackSelector, 1);
 

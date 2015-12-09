@@ -69,7 +69,7 @@ public:
 	 * @param p_source kCollisionData or kSimulation
 	 */
 	inline void SetDataSource(DataSource p_source) {
-		return data_source_;
+		data_source_ = p_source;
 	}
 
 	/**

@@ -75,10 +75,10 @@ public:
 	virtual Bool_t Pass(int i) = 0;
 	
 	/**
-	  * Pass (int i, TString p_cut_name)
+	  * PassCut (int i, TString p_cut_name)
 	  * - External access to individual cut functions. Doesn't increment counters.
 	  */
-	virtual Bool_t Pass(int i, TString p_cut_name) = 0;
+	virtual Bool_t PassCut(int i, TString p_cut_name) = 0;
 
 
 	/**
