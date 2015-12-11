@@ -68,19 +68,6 @@ public:
 	/*** Methods to perform the object classifications ***/
 	// Most of these are pure virtual functions, since they need to know which D3PDObjectBase-derived classes to use in the cut functions.
 
-	/** 
-	  * Pass (int i)
-	  * - Returns whether object with D3PDReader::Event index i passes the configured cuts.
-	  * - Records the cut decisions for later digestion.
-	  */
-	virtual Bool_t Pass(int i) = 0;
-	
-	/**
-	  * PassCut (int i, TString p_cut_name)
-	  * - External access to individual cut functions. Doesn't increment counters.
-	  */
-	virtual Bool_t PassCut(int i, TString p_cut_name) = 0;
-
 	/**
 	  * ClassifyObjects (with overlap removal)
 	  * - Calls Pass on each object in the event.
@@ -127,13 +114,6 @@ public:
 	  */
 	int IsGood(int p_index);
 
-
-	/**
-	 * Set whether to use preselection maps. Set to "true" by default.
-	 * @param p_use_preselection 'true' to use preselection maps.
-	 */
-	void UsePreselection(bool p_use_preselection);
-
 	inline void SetObjectFakeType(IObjectSelector::ObjectFakeType p_fake_type) {
 		object_fake_type_ = p_fake_type;
 	}
@@ -145,6 +125,21 @@ public:
 	inline IObjectSelector::ObjectName GetObjectName() {
 		return object_name_;
 	}
+
+protected:
+	/** 
+	  * Pass (int i)
+	  * - Returns whether object with D3PDReader::Event index i passes the configured cuts.
+	  * - Records the cut decisions for later digestion.
+	  */
+	virtual Bool_t Pass(int i);
+	
+	/**
+	  * PassCut (int i, TString p_cut_name)
+	  * - External access to individual cut functions. Doesn't increment counters.
+	  */
+	virtual Bool_t PassCut(int i, TString p_cut_name);
+
 
 	/*** Private Methods ***/
 private:

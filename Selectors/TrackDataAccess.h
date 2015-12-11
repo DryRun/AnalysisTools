@@ -45,7 +45,7 @@ protected:
 	/**
 	 * Load a new event
 	 */
-	bool NewEvent();
+	virtual bool RetrieveTracks();
 
 
 	/*** Members ***/

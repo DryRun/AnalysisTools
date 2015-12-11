@@ -19,7 +19,7 @@ protected:
 	/**
 	 * Load a new event
 	 */
-	bool NewEvent();
+	bool RetrieveEventInfo();
 
 	/*** Members ***/
 protected:

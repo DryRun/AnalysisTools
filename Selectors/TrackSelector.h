@@ -44,10 +44,6 @@ public:
 	/*** Public Members ***/
 public:
 	const xAOD::TrackParticleContainer * tracks_; //!
-	const xAOD::TruthParticleContainer * truth_particles_; //!
-	const xAOD::TruthVertexContainer * truth_vertices_; //!
-	const xAOD::TruthEventContainer * truth_events_; //!
-	const xAOD::TruthPileupEventContainer * truth_pileup_events_; //!
 
 	ClassDef(TrackSelector, 1);
 

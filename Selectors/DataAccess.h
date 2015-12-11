@@ -44,7 +44,6 @@ public:
 	}
 
 protected:
-	virtual bool NewEvent() = 0;
 
 /*** Members ***/
 protected:
