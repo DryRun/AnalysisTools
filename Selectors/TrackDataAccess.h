@@ -14,42 +14,47 @@
 #include "Selectors/DataAccess.h"
 
 class TrackDataAccess : public virtual DataAccess {
-	/*** Public Methods ***/
+	/*** Methods ***/
 public:
 	TrackDataAccess();
 
 	~TrackDataAccess();
 
-	inline void LoadTrackTruth() {
-		track_truth_ = true;
+	inline const xAOD::TrackParticleContainer* GetTrackParticleContainer() {
+		return tracks_;
 	}
 
-	/*** Protected Methods ***/
+	inline const xAOD::TruthParticleContainer* GetTruthParticleContainer() {
+		return truth_particles_;
+	}
+
+	inline const xAOD::TruthVertexContainer* GetTruthVertexContainer() {
+		return truth_vertices_;
+	}
+
+	inline const xAOD::TruthEventContainer* GetTruthEventContainer() {
+		return truth_events_;
+	}
+
+	inline const xAOD::TruthPileupEventContainer* GetTruthPileupEventContainer() {
+		return truth_pileup_events_;
+	}
+
+
 protected:
 	/**
 	 * Load a new event
 	 */
-	void NewEvent();
-
-	/*** Private Methods ***/
-private:
+	bool NewEvent();
 
 
-	/*** Public Members ***/
-public:
-
-	/*** Protected Members ***/
+	/*** Members ***/
 protected:
 	const xAOD::TrackParticleContainer * tracks_; //!
 	const xAOD::TruthParticleContainer * truth_particles_; //!
 	const xAOD::TruthVertexContainer * truth_vertices_; //!
 	const xAOD::TruthEventContainer * truth_events_; //!
 	const xAOD::TruthPileupEventContainer * truth_pileup_events_; //!
-
-	/*** Private Members ***/
-private:
-	bool track_truth_; //!
-
 
 };
 

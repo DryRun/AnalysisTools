@@ -19,16 +19,8 @@ IObjectSelector::IObjectSelector() {
 
 IObjectSelector::~IObjectSelector() {}
 
-void IObjectSelector::UsePreselection(bool p_use_preselection) {
-	use_preselection_ = p_use_preselection;
-}
-
-void IObjectSelector::SetNewEvent(std::map<Int_t, Bool_t> *p_object_preselection) {
+void IObjectSelector::SetNewEvent() {
 	Clear();
-
-	if (use_preselection_) {
-		object_preselection_ = p_object_preselection;
-	}
 	fresh_event_ = true;
 }
 
@@ -45,26 +37,26 @@ void IObjectSelector::Clear() {
 bool IObjectSelector::Pass(int i) {
 	bool c_pass = true;
 
-	m_pass_calls++;
-	for (std::vector<TString>::iterator cut = cut_list.begin(); cut != cut_list.end(); ++cut) {
+	pass_calls_++;
+	for (std::vector<TString>::iterator cut = cut_list_.begin(); cut != cut_list_.end(); ++cut) {
 		#ifdef DEBUG_IObjectSelector
 		if (debug_counter++ < MAX_DEBUG) {
 			std::cout << "[IObjectSelector] DEBUG : Applying cut " << *cut << std::endl;
 		}
 		#endif
-		if (!cut_functions[*cut](event_, this, i) {
+		if (!cut_functions_[*cut](data_, this, i)) {
 			if (c_pass) {
 				c_pass = false;
-				m_cutflow_counter[*cut]++;
+				cutflow_counter_[*cut]++;
 			}
-			m_cut_counter[*cut]++;
+			cut_counter_[*cut]++;
 		}
 	}
 	
 	if (c_pass) {
-		m_pass++;
+		pass_++;
 	} else {
-		m_fail++;
+		fail_++;
 	}
 
 	return c_pass;
@@ -72,11 +64,11 @@ bool IObjectSelector::Pass(int i) {
 
 bool IObjectSelector::PassCut(int i, TString p_cut_name) {
 
-	if (!configured[p_cut_name]) {
+	if (!CutIsConfigured(p_cut_name)) {
 		std::cerr << "[IObjectSelector] ERROR : Requested cut " << p_cut_name << " was not configured. Exiting..." << std::endl;
 		exit(1);
 	}
-	bool c_pass = cut_functions[p_cut_name](event_, this, i);
+	bool c_pass = cut_functions_[p_cut_name](data_, this, i);
 	return c_pass;
 }
 

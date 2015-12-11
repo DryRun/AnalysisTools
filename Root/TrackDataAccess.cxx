@@ -4,37 +4,40 @@
 #include "Selectors/TrackDataAccess.h"
 
 TrackDataAccess::TrackDataAccess() {
-	track_truth_ = false;
+	tracks_ = 0;
+	truth_particles_ = 0;
+	truth_vertices_ = 0;
+	truth_events_ = 0;
+	truth_pileup_events_ = 0;
 }
 
 TrackDataAccess::~TrackDataAccess() {}
 
-TrackDataAccess::NewEvent() {
+bool TrackDataAccess::NewEvent() {
+	bool success = true;
 	if (!event_->retrieve(tracks_,"InDetTrackParticles").isSuccess()) {
-		Error("execute()", "Failed to retrieve InDetTrackParticles from xAOD.");
-		return EL::StatusCode::FAILURE;
+		Error("TrackDataAccess::NewEvent()", "Failed to retrieve InDetTrackParticles from xAOD.");
+		success = false;
 	}
-
 	if (data_source_ == kSimulation) {
 		if (!event_->retrieve(truth_particles_, "TruthParticles").isSuccess()) {
-			Error("execute()", "Failed to retrieve TruthParticles from xAOD.");
-			return EL::StatusCode::FAILURE;
+			Error("TrackTruthDataAccess::NewEvent()", "Failed to retrieve TruthParticles from xAOD.");
+			success = false;
 		}
 		if (!event_->retrieve(truth_vertices_, "TruthVertices").isSuccess()) {
-			Error("execute()", "Failed to retrieve TruthVertices from xAOD.");
-			return EL::StatusCode::FAILURE;
+			Error("TrackTruthDataAccess::NewEvent()", "Failed to retrieve TruthVertices from xAOD.");
+			success = false;
 		}
 		if (!event_->retrieve(truth_events_, "TruthEvents").isSuccess()) {
-			Error("execute()", "Failed to retrieve TruthEvents from xAOD.");
-			return EL::StatusCode::FAILURE;
+			Error("TrackTruthDataAccess::NewEvent()", "Failed to retrieve TruthEvents from xAOD.");
+			success = false;
 		}
 		if (!event_->retrieve(truth_pileup_events_, "TruthPileupEvents").isSuccess()) {
-			Error("execute()", "Failed to retrieve TruthPileupEvents from xAOD.");
-			return EL::StatusCode::FAILURE;
+			Error("TrackTruthDataAccess::NewEvent()", "Failed to retrieve TruthPileupEvents from xAOD.");
+			success = false;
 		}
-
 	}
-
+	return success;
 }
 
 #endif

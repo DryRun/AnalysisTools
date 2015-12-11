@@ -10,6 +10,7 @@
 
 #include "Selectors/IObjectSelector.h"
 #include "Selectors/TrackCutFunctions.h"
+#include "Selectors/TrackDataAccess.h"
 
 class TrackSelector : public IObjectSelector {
 
@@ -18,6 +19,9 @@ public:
 	TrackSelector();
 	~TrackSelector();
 
+	/**
+	 * Call whenever a new event is set. This clears the last event's results.
+	 */
 	void SetNewEvent();
 
 	/**
@@ -34,6 +38,8 @@ public:
 	 * @return D3PDReader::TrackD3PDObject*
 	 */
 	xAOD::TrackParticleContainer* GetTrackCollection();
+
+	void ClassifyObjects();
 
 	/*** Public Members ***/
 public:

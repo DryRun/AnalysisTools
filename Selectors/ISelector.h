@@ -23,16 +23,11 @@
 #include "EventLoop/Worker.h"
 #include "EventLoop/Algorithm.h"
 #include "RootUtils/SimpleConfiguration.h"
+#include "Selectors/DataAccess.h"
 
-class ISelector : public ISelector, public TObject {
+class ISelector : public TObject {
 
 	ClassDef(ISelector, 1);
-
-public:
-	enum DataSource {
-		kCollisionData,
-		kSimulation
-	};
 
 	/*** Public Methods ***/
 public:
@@ -56,19 +51,10 @@ public:
 	bool CutIsConfigured(TString p_name);
 
 	/**
-	 * Set pointer to a D3PDReader::Event, and specify what kind of D3PD
-	 * @param p_event     Pointer to D3PDReader::Event
-	 * @param p_d3pd_type D3PDReader::SUSY or D3PDReader::SMWZ
-	 */
-	inline void SetxAODEvent(xAOD::TEvent *p_event) {
-		event_ = p_event;
-	}
-
-	/**
 	 * Set the data source to 
 	 * @param p_source kCollisionData or kSimulation
 	 */
-	inline void SetDataSource(DataSource p_source) {
+	inline void SetDataSource(DataAccess::DataSource p_source) {
 		data_source_ = p_source;
 	}
 
@@ -94,13 +80,10 @@ public:
 		return author_;
 	}
 
-	inline std::vector<Double_t> *GetCutParameters(TString p_name) {
-		return &cut_parameters_;
-	}
+	std::vector<Double_t>* GetCutParameters(TString p_name);
 
-	inline std::vector<TString> *GetCutDescriptors(TString p_name) {
-		return &cut_descriptors_;
-	}
+	std::vector<TString>* GetCutDescriptors(TString p_name);
+
 
 	/**
 	 * Print current cut results
@@ -124,24 +107,33 @@ private:
 	virtual void AddCut(TXMLNode *cut_node);
 	//void AddCut(TString c_name, Double_t c_value, TString c_cutgroup_name);
 
+	/**
+	 * Set pointer to the DataAccess object that manages I/O from the xAOD.
+	 * @param p_data Pointer to DataAccess object. Note: your analysis code should inherit from subclasses of this. 
+	 */
+	void SetDataAccess(DataAccess* p_data) {
+		data_ = p_data;
+	}
 
 	/*** Public Members ***/
 public:
+	DataAccess* data_; // Pointer to the DataAccess object. Your main analysis code should inherit from subclasses of this class for data access. The cut functions should cast this to a specific DataAccess object. 
+
 	// -- List of configured cuts, and parameters
 	TString author_;
 	TString name_;
 	TString type_; // numerator or denominator
+	TString collection_name_; // For cases where the object name must be specified, e.g. jet collections.
 	std::vector<TString> cut_list_;
 	std::map<TString, std::vector<Double_t> > cut_parameters_;
 	std::map<TString, std::vector<TString> > cut_descriptors_;
  	std::map<TString, bool> configured_cuts_;
  	bool save_histograms_; 
 
-	// -- Data comes from the D3PDReader event.
-	xAOD::TEvent *event_;
+
 
 	// -- Awareness of data or MC. Some cut functions may want to know.
-	DataSource data_source_;
+	DataAccess::DataSource data_source_;
 
 	// -- Bookkeeping
 	std::map<TString, Int_t> cut_counter_; // Lists number of times a given cut is failed. Map is <cut> : <#fails>. Inclusive.
@@ -151,7 +143,7 @@ public:
 	int pass_calls_;
 	int pass_;
 	int fail_;
-	bool configured;
+	bool configured_;
 	TH1D *h_cutflow_counter_;
 	TH1D *h_cut_counter_;
 	Int_t debug_counter_;

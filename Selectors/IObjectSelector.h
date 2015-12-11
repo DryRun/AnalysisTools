@@ -23,8 +23,10 @@
 #include "EventLoop/Worker.h"
 #include "EventLoop/Algorithm.h"
 #include "RootUtils/SimpleConfiguration.h"
+#include "Selectors/ISelector.h"
+#include "Selectors/DataAccess.h"
 
-class IObjectSelector : public ISelector, public TObject {
+class IObjectSelector : public ISelector {
 public:
 	enum ObjectName {
 		kElectron,
@@ -51,14 +53,13 @@ public:
 	// Index of cut functions
 public:
 	#ifndef __CINT__
-	typedef bool (*CutFunction)(const xAOD::TEvent* p_event, IObjectSelector* p_track_selector, int n);
+	typedef bool (*CutFunction)(const DataAccess* p_data, IObjectSelector* p_track_selector, int n);
  	std::map<TString, CutFunction> cut_functions_;
  	#endif
 
 
 	/*** Public Methods ***/
 public:
-	ClassDef(IObjectSelector, 1);
 
 	// Basic
 	IObjectSelector();
@@ -80,38 +81,19 @@ public:
 	  */
 	virtual Bool_t PassCut(int i, TString p_cut_name) = 0;
 
-
-	/**
-	  * SetNewEvent
-	  * - Clear maps and counters from last event, setting a flag "m_fresh_event" for the Classify function
-	  * - Set overlap removal and other preselection-type maps
-	  */
-	virtual void SetNewEvent(std::map<Int_t, Bool_t> *p_object_preselection);
-
-
 	/**
 	  * ClassifyObjects (with overlap removal)
 	  * - Calls Pass on each object in the event.
 	  */
 	virtual void ClassifyObjects() = 0;
 
+	virtual void SetNewEvent();
+
 	/**
 	  * Clear
 	  * - Reset the maps and vectors for the next event
 	  */
 	void Clear();
-
-	inline void AddTruthMatchIndex(const int p_reco_index, const int p_mc_index) {
-		m_truth_match_indices_[p_reco_index] = p_mc_index;
-	}
-
-	const int GetTruthMatchIndex(const int p_reco_index) {
-		if (m_truth_match_indices_.find(p_reco_index) != m_truth_match_indices_.end()) {
-			return m_truth_match_indices_[p_reco_index];
-		} else {
-			return -1;
-		}
-	}
 
 	/*** Methods to get the results of the current event ***/
 
@@ -152,15 +134,15 @@ public:
 	 */
 	void UsePreselection(bool p_use_preselection);
 
-	inline void SetObjectFakeType(ObjectSelector::ObjectFakeType p_fake_type) {
+	inline void SetObjectFakeType(IObjectSelector::ObjectFakeType p_fake_type) {
 		object_fake_type_ = p_fake_type;
 	}
 
-	inline ObjectSelector::ObjectFakeType GetObjectFakeType() {
+	inline IObjectSelector::ObjectFakeType GetObjectFakeType() {
 		return object_fake_type_;
 	}
 
-	inline ObjectSelector::ObjectName GetObjectName() {
+	inline IObjectSelector::ObjectName GetObjectName() {
 		return object_name_;
 	}
 
@@ -193,7 +175,7 @@ protected:
 
  	std::map<int, int> truth_match_indices_;
 
-	ClassDef(ObjectSelector, 1);
+	ClassDef(IObjectSelector, 1);
 
 
 };

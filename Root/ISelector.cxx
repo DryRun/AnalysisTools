@@ -6,18 +6,17 @@
 #include <iomanip>
 #include <cmath>
 
-ClassImp(Selector);
+ClassImp(ISelector);
 
-ISelector::Selector() {
+ISelector::ISelector() {
 	configured_ = false;
-	event_ = 0;
-	data_source_ = Selector::kCollisionData;
+	data_ = 0;
 	debug_counter_ = 0;
 	h_cutflow_counter_ = 0;
 	h_cut_counter_ = 0;
 }
 
-ISelector::~Selector() {
+ISelector::~ISelector() {
 	if (h_cutflow_counter_) delete h_cutflow_counter_;
 	if (h_cut_counter_) delete h_cut_counter_;
 }
@@ -34,9 +33,9 @@ void ISelector::GetConfigurationMetadata(TDOMParser *p_xml) {
 		} else if (sel_elem->GetNodeName() == TString("name")) {
 			name_ = sel_elem->GetText();
 		} else if (sel_elem->GetNodeName() == TString("type")) {
-			m_type = sel_elem->GetText();
+			type_ = sel_elem->GetText();
 		} else if (sel_elem->GetNodeName() == TString("collection")) {
-			m_collection_name = sel_elem->GetText();
+			collection_name_ = sel_elem->GetText();
 		}
 		// Next top-level node
 		sel_elem = sel_elem->GetNextNode();
@@ -87,7 +86,7 @@ bool ISelector::LoadConfiguration(TString config_path, bool verbose) {
 	}
 
 	// Result
-	configured = success;
+	configured_ = success;
 	if (success && verbose) {
 		std::cout << "[Selector] INFO : Read in selection: " << std::endl;
 		if (author_) std::cout << "[Selector] INFO : \tAuthor = " << author_ << std::endl;
@@ -132,12 +131,12 @@ void ISelector::PrintSummary() {
 
 	std::cout << "[Selector] INFO : Cut Flow:" << std::endl;
 	for (std::vector<TString>::iterator it = cut_list_.begin(); it != cut_list_.end(); ++it) {
-		std::cout << "[Selector] INFO : \t" << *it << " = " << m_cutflow_counter[*it] << std::endl;
+		std::cout << "[Selector] INFO : \t" << *it << " = " << cutflow_counter_[*it] << std::endl;
 	}
 
 	std::cout << "[Selector] INFO : Cut Counters:" << std::endl;
 	for (std::vector<TString>::iterator it = cut_list_.begin(); it != cut_list_.end(); ++it) {
-		std::cout << "[Selector] INFO : \t" << *it << " = " << m_cut_counter[*it] << std::endl;
+		std::cout << "[Selector] INFO : \t" << *it << " = " << cut_counter_[*it] << std::endl;
 	}
 
 	std::cout << "[Selector] INFO : ****************************************************************" << std::endl;
@@ -201,10 +200,10 @@ void ISelector::SaveHistograms(EL::Worker *wk) {
 	int bin = 1;
 	for (std::vector<TString>::iterator it = cut_list_.begin(); it != cut_list_.end(); ++it) {
 
-		objects_remaining = objects_remaining - m_cutflow_counter[*it];
+		objects_remaining = objects_remaining - cutflow_counter_[*it];
 
 		h_cutflow_counter_->SetBinContent(bin, objects_remaining);
-		h_cut_counter_->SetBinContent(bin, m_cut_counter[*it]);
+		h_cut_counter_->SetBinContent(bin, cut_counter_[*it]);
 
 		h_cutflow_counter_->GetXaxis()->SetBinLabel(bin, *it);
 		h_cut_counter_->GetXaxis()->SetBinLabel(bin, *it);
@@ -214,14 +213,14 @@ void ISelector::SaveHistograms(EL::Worker *wk) {
 }
 
 bool ISelector::CutIsConfigured(TString p_name) {
-	configured = false;
+	bool cut_is_configured = false;
 	for (std::vector<TString>::iterator it = cut_list_.begin(); it != cut_list_.end(); ++it) {
 		if ((*it) == p_name) {
-			configured = true;
+			cut_is_configured = true;
 			break;
 		}
 	}
-	return configured;
+	return cut_is_configured;
 }
 
 std::vector<Double_t>* ISelector::GetCutParameters(TString p_name) {
@@ -239,18 +238,6 @@ std::vector<TString>* ISelector::GetCutDescriptors(TString p_name) {
 		return 0x0;
 	}
 
-}
-
-TString ISelector::GetName() {
-	return name_;
-}
-
-TString ISelector::GetType() {
-	return m_type;
-}
-
-TString ISelector::GetAuthor() {
-	return author_;
 }
 
 void ISelector::PrintCurrentCutResults() {
