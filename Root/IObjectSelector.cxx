@@ -1,7 +1,6 @@
 #include "Selectors/IObjectSelector.h"
+#define DEBUG_IObjectSelector
 #define MAX_DEBUG 100
-
-ClassImp(IObjectSelector);
 
 IObjectSelector::IObjectSelector() {
 
@@ -15,6 +14,10 @@ IObjectSelector::IObjectSelector() {
 	fresh_event_ = false;
 
 	use_preselection_ = true;
+
+	#ifdef DEBUG_IObjectSelector
+	debug_counter = 0;
+	#endif
 }
 
 IObjectSelector::~IObjectSelector() {}

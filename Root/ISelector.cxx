@@ -6,8 +6,6 @@
 #include <iomanip>
 #include <cmath>
 
-ClassImp(ISelector);
-
 ISelector::ISelector() {
 	configured_ = false;
 	data_ = 0;

@@ -37,18 +37,18 @@ public:
 	 * Get the TrackD3PDObject associated with this selector.
 	 * @return D3PDReader::TrackD3PDObject*
 	 */
-	xAOD::TrackParticleContainer* GetTrackCollection();
+	inline const xAOD::TrackParticleContainer* GetTrackCollection() {
+		return tracks_;
+	}
+	inline const xAOD::TrackParticleContainer* GetTrackCollection() const {
+		return tracks_;
+	}
 
 	void ClassifyObjects();
 
 	/*** Public Members ***/
 public:
 	const xAOD::TrackParticleContainer * tracks_; //!
-
-	ClassDef(TrackSelector, 1);
-
-private:
-	int debug_counter;
 
 };
 

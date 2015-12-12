@@ -17,7 +17,7 @@ public:
 public:
 	DataAccess();
 
-	~DataAccess();
+	virtual ~DataAccess();
 
 	inline void SetDataSource(DataSource p_source) {
 		if (p_source == kCollisionData) {

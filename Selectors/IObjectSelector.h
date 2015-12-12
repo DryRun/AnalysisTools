@@ -104,7 +104,7 @@ public:
 	  * GetGoodObjectList
 	  * - Returns a list of the indices of good objects in the current event
 	  */
-	std::vector<Int_t>* GetGoodObjectList() {
+	inline std::vector<Int_t>* GetGoodObjectList() {
 		return &obj_good_;
 	}
 
@@ -144,7 +144,7 @@ protected:
 	/*** Private Methods ***/
 private:
 
-	/*** Public Members ***/
+	/*** Members ***/
 public:
  	// Preselection things
  	bool use_preselection_;
@@ -160,7 +160,6 @@ public:
  	Int_t n_good_objects_;
 
 
- 	/*** Protected Members ***/
 protected:
 	Bool_t fresh_event_;
  
@@ -170,8 +169,8 @@ protected:
 
  	std::map<int, int> truth_match_indices_;
 
-	ClassDef(IObjectSelector, 1);
-
+private:
+	int debug_counter;
 
 };
 

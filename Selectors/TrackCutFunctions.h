@@ -16,6 +16,7 @@
 #include "TrackAnalysis/TrackTruthHelper.h"
 #include "RootUtils/Constants.h"
 
+#include "Selectors/EventInfoDataAccess.h"
 #include "Selectors/TrackDataAccess.h"
 #include "Selectors/TrackSelector.h"
 
@@ -27,6 +28,8 @@ namespace TrackCutFunctions {
 	bool MinNSCTHits(const DataAccess* p_data, IObjectSelector* p_track_selector, int n);
 	bool MinNSiHits(const DataAccess* p_data, IObjectSelector* p_track_selector, int n);
 	bool MinNPixLayerHits(const DataAccess* p_data, IObjectSelector* p_track_selector, int n);
+	bool MinNInnerPixLayerHits(const DataAccess* p_data, IObjectSelector* p_track_selector, int n);
+	bool MinNOuterPixLayerHits(const DataAccess* p_data, IObjectSelector* p_track_selector, int n);
 	bool MinNSCTLayerHits(const DataAccess* p_data, IObjectSelector* p_track_selector, int n);
 	bool MinNSiLayerHits(const DataAccess* p_data, IObjectSelector* p_track_selector, int n);
 	bool MaxNPixHoles(const DataAccess* p_data, IObjectSelector* p_track_selector, int n);
@@ -35,3 +38,5 @@ namespace TrackCutFunctions {
 	bool MaxD0SignificanceNoBeamspot(const DataAccess* p_data, IObjectSelector* p_track_selector, int n);
 	bool MaxD0Significance(const DataAccess* p_data, IObjectSelector* p_track_selector, int n);
 }
+
+#endif

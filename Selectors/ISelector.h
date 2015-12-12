@@ -25,13 +25,10 @@
 #include "RootUtils/SimpleConfiguration.h"
 #include "Selectors/DataAccess.h"
 
-class ISelector : public TObject {
-
-	ClassDef(ISelector, 1);
+class ISelector {
 
 	/*** Public Methods ***/
 public:
-	// Basic
 	ISelector();
 	~ISelector();
 
@@ -49,14 +46,6 @@ public:
 	 * @return        True if cut was configured in LoadConfiguration()
 	 */
 	bool CutIsConfigured(TString p_name);
-
-	/**
-	 * Set the data source to 
-	 * @param p_source kCollisionData or kSimulation
-	 */
-	inline void SetDataSource(DataAccess::DataSource p_source) {
-		data_source_ = p_source;
-	}
 
 	/**
 	 * Print list of cuts and cut parameters/descriptors
@@ -111,7 +100,7 @@ private:
 	 * Set pointer to the DataAccess object that manages I/O from the xAOD.
 	 * @param p_data Pointer to DataAccess object. Note: your analysis code should inherit from subclasses of this. 
 	 */
-	void SetDataAccess(DataAccess* p_data) {
+	inline void SetDataAccess(DataAccess* p_data) {
 		data_ = p_data;
 	}
 

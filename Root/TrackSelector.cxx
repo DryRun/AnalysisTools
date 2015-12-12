@@ -1,7 +1,4 @@
 #include "Selectors/TrackSelector.h"
-#define MAX_DEBUG 100
-
-ClassImp(TrackSelector);
 
 TrackSelector::TrackSelector() : IObjectSelector() {
 	object_name_ = IObjectSelector::kTrack;
@@ -10,17 +7,23 @@ TrackSelector::TrackSelector() : IObjectSelector() {
 	//cut_functions["tight++_flag"]                   = &ElectronCutFunctions::ApplyTightPlusPlusFlag;
 	//cut_functions["medium++_flag"]                  = &ElectronCutFunctions::ApplyMediumPlusPlusFlag;
 	//cut_functions["loose++_flag"]                   = &ElectronCutFunctions::ApplyLoosePlusPlusFlag;
-
+	cut_functions_["MinNPixHits"] = &TrackCutFunctions::MinNPixHits;
+	cut_functions_["MinNSCTHits"] = &TrackCutFunctions::MinNSCTHits;
+	cut_functions_["MinNSiHits"] = &TrackCutFunctions::MinNSiHits;
+	cut_functions_["MinNPixLayerHits"] = &TrackCutFunctions::MinNPixLayerHits;
+	cut_functions_["MinNInnerPixLayerHits"] = &TrackCutFunctions::MinNInnerPixLayerHits;
+	cut_functions_["MinNOuterPixLayerHits"] = &TrackCutFunctions::MinNOuterPixLayerHits;
+	cut_functions_["MinNSCTLayerHits"] = &TrackCutFunctions::MinNSCTLayerHits;
+	cut_functions_["MinNSiLayerHits"] = &TrackCutFunctions::MinNSiLayerHits;
+	cut_functions_["MaxNPixHoles"] = &TrackCutFunctions::MaxNPixHoles;
+	cut_functions_["MaxNSCTHoles"] = &TrackCutFunctions::MaxNSCTHoles;
+	cut_functions_["MaxNSiHoles"] = &TrackCutFunctions::MaxNSiHoles;
+	cut_functions_["MaxD0SignificanceNoBeamspot"] = &TrackCutFunctions::MaxD0SignificanceNoBeamspot;
+	cut_functions_["MaxD0Significance"] = &TrackCutFunctions::MaxD0Significance;
 	// Set configured flags to false
 	for (std::map<TString, CutFunction>::iterator it = cut_functions_.begin(); it != cut_functions_.end(); ++it) {
 		configured_cuts_[(*it).first] = false;
 	}
-
-
-	#ifdef DEBUG_TrackSelector
-	debug_counter = 0;
-	#endif
-
 }
 
 TrackSelector::~TrackSelector() {}

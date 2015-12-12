@@ -18,34 +18,54 @@ class TrackDataAccess : public virtual DataAccess {
 public:
 	TrackDataAccess();
 
-	~TrackDataAccess();
+	virtual ~TrackDataAccess();
 
 	inline const xAOD::TrackParticleContainer* GetTrackParticleContainer() {
 		return tracks_;
 	}
 
+	inline const xAOD::TrackParticleContainer* GetTrackParticleContainer() const {
+		return tracks_;
+	}	
+
 	inline const xAOD::TruthParticleContainer* GetTruthParticleContainer() {
 		return truth_particles_;
 	}
+
+	inline const xAOD::TruthParticleContainer* GetTruthParticleContainer() const {
+		return truth_particles_;
+	}	
 
 	inline const xAOD::TruthVertexContainer* GetTruthVertexContainer() {
 		return truth_vertices_;
 	}
 
+	inline const xAOD::TruthVertexContainer* GetTruthVertexContainer() const {
+		return truth_vertices_;
+	}	
+
 	inline const xAOD::TruthEventContainer* GetTruthEventContainer() {
 		return truth_events_;
 	}
 
+	inline const xAOD::TruthEventContainer* GetTruthEventContainer() const {
+		return truth_events_;
+	}	
+
 	inline const xAOD::TruthPileupEventContainer* GetTruthPileupEventContainer() {
 		return truth_pileup_events_;
 	}
+
+	inline const xAOD::TruthPileupEventContainer* GetTruthPileupEventContainer() const {
+		return truth_pileup_events_;
+	}	
 
 
 protected:
 	/**
 	 * Load a new event
 	 */
-	virtual bool RetrieveTracks();
+	bool RetrieveTracks();
 
 
 	/*** Members ***/
