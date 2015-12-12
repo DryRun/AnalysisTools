@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE selection SYSTEM "http://www-atlas.lbl.gov/~dryu/Multilepton/selections.dtd">
+<selection>
+	<author>David Yu</author>
+	<name>TrackSelection_pixlayers_1_pixholes_0_d0withoutBS_7</name>
+
+	<cut name="MinNPixLayerHits">
+		<parameter>1</parameter>
+	</cut>
+	<cut name="MaxNPixHoles">
+		<parameter>0</parameter>
+	</cut>
+	<cut name="MaxD0SignificanceNoBeamspot">
+		<parameter>7</parameter>
+	</cut>
+	<cut name="MinNSiHits">
+		<parameter>9</parameter>
+	</cut>
+</selection>
