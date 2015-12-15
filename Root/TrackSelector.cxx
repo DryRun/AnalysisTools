@@ -48,6 +48,7 @@ void TrackSelector::ClassifyObjects() {
 
 void TrackSelector::SetNewEvent() {
 	IObjectSelector::SetNewEvent();
+	tracks_ = dynamic_cast<TrackDataAccess*>(data_)->GetTrackParticleContainer();
 }
 
 

@@ -73,6 +73,13 @@ public:
 
 	std::vector<TString>* GetCutDescriptors(TString p_name);
 
+	/**
+	 * Set pointer to the DataAccess object that manages I/O from the xAOD.
+	 * @param p_data Pointer to DataAccess object. Note: your analysis code should inherit from subclasses of this. 
+	 */
+	inline void SetDataAccess(DataAccess* p_data) {
+		data_ = p_data;
+	}
 
 	/**
 	 * Print current cut results
@@ -95,14 +102,6 @@ private:
 
 	virtual void AddCut(TXMLNode *cut_node);
 	//void AddCut(TString c_name, Double_t c_value, TString c_cutgroup_name);
-
-	/**
-	 * Set pointer to the DataAccess object that manages I/O from the xAOD.
-	 * @param p_data Pointer to DataAccess object. Note: your analysis code should inherit from subclasses of this. 
-	 */
-	inline void SetDataAccess(DataAccess* p_data) {
-		data_ = p_data;
-	}
 
 	/*** Public Members ***/
 public:

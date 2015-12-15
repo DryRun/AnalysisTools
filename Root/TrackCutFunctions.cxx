@@ -48,16 +48,16 @@ namespace TrackCutFunctions {
 
 	bool MaxNPixHoles(const DataAccess* p_data, IObjectSelector* p_track_selector, int n) {
 		unsigned char this_npixholes = dynamic_cast<const TrackDataAccess*>(p_data)->GetTrackParticleContainer()->at(n)->auxdata< unsigned char >("numberOfPixelHoles");
-		return this_npixholes >= (unsigned char)(p_track_selector->GetCutParameters("MaxNPixHoles")->at(0));
+		return this_npixholes <= (unsigned char)(p_track_selector->GetCutParameters("MaxNPixHoles")->at(0));
 	}
 
 	bool MaxNSCTHoles(const DataAccess* p_data, IObjectSelector* p_track_selector, int n) {
 		unsigned char this_nsctholes = dynamic_cast<const TrackDataAccess*>(p_data)->GetTrackParticleContainer()->at(n)->auxdata< unsigned char >("numberOfSCTHoles");
-		return this_nsctholes >= (unsigned char)(p_track_selector->GetCutParameters("MaxNSCTHoles")->at(0));	}
+		return this_nsctholes <= (unsigned char)(p_track_selector->GetCutParameters("MaxNSCTHoles")->at(0));	}
 
 	bool MaxNSiHoles(const DataAccess* p_data, IObjectSelector* p_track_selector, int n) {
 		unsigned char this_nsiholes = dynamic_cast<const TrackDataAccess*>(p_data)->GetTrackParticleContainer()->at(n)->auxdata< unsigned char >("numberOfPixelHoles") + dynamic_cast<const TrackDataAccess*>(p_data)->GetTrackParticleContainer()->at(n)->auxdata< unsigned char >("numberOfSCTHoles");
-		return this_nsiholes >= (unsigned char)(p_track_selector->GetCutParameters("MaxNSiHoles")->at(0));
+		return this_nsiholes <= (unsigned char)(p_track_selector->GetCutParameters("MaxNSiHoles")->at(0));
 	}
 
 	bool MaxD0SignificanceNoBeamspot(const DataAccess* p_data, IObjectSelector* p_track_selector, int n) {

@@ -1,5 +1,5 @@
 #include "Selectors/IObjectSelector.h"
-#define DEBUG_IObjectSelector
+//#define DEBUG_IObjectSelector
 #define MAX_DEBUG 100
 
 IObjectSelector::IObjectSelector() {
