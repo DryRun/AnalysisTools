@@ -1,10 +1,11 @@
 import os
 import sys
 
-for cut_numberOfContribPixelLayers in [0, 1, 2, -1]:
+#for cut_numberOfContribPixelLayers in [0, 1, 2, -1]:
+for cut_numberOfContribPixelLayers in [0, 1, 2]:
     for cut_numberOfPixelHoles in [0, 1]:
         for cut_d0 in ["withBS", "withoutBS"]:
-            name = "TrackSelection_pixlayers_"
+            name = "TrackSelection_pixhits_"
             if cut_numberOfContribPixelLayers >= 0:
                 name += str(cut_numberOfContribPixelLayers)
             else:
@@ -19,7 +20,8 @@ for cut_numberOfContribPixelLayers in [0, 1, 2, -1]:
 
             # Pixel layer cut
             if cut_numberOfContribPixelLayers >= 0:
-                xml_file.write("\t<cut name=\"MinNPixLayerHits\">\n")
+                #xml_file.write("\t<cut name=\"MinNPixLayerHits\">\n")
+                xml_file.write("\t<cut name=\"MinNPixHits\">\n")
                 xml_file.write("\t\t<parameter>{}</parameter>\n".format(cut_numberOfContribPixelLayers))
                 xml_file.write("\t</cut>\n")
             else:
