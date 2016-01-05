@@ -2,7 +2,7 @@
 #define TrackCutFunctions_cxx
 
 #define DEBUG_MAX 100
-#include "Selectors/TrackCutFunctions.h"
+#include "AnalysisTools/TrackCutFunctions.h"
 
 namespace TrackCutFunctions {
 	bool MinNPixHits(const DataAccess* p_data, IObjectSelector* p_track_selector, int n) {

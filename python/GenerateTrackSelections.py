@@ -11,7 +11,7 @@ for cut_numberOfContribPixelLayers in [0, 1, 2]:
             else:
                 name += "IO"
             name += "_pixholes_" + str(cut_numberOfPixelHoles) + "_d0" + cut_d0 + "_7"
-            xml_file = open("/global/u2/d/dryu/Luminosity/Code/Selectors/data/TrackSelections/{}.xml".format(name), 'w')
+            xml_file = open("/global/u2/d/dryu/Luminosity/Code/AnalysisTools/data/TrackSelections/{}.xml".format(name), 'w')
             xml_file.write("<?xml version=\"1.0\"?>\n")
             xml_file.write("<!DOCTYPE selection SYSTEM \"http://www-atlas.lbl.gov/~dryu/Multilepton/selections.dtd\">\n")
             xml_file.write("<selection>\n")

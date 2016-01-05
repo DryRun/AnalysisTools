@@ -14,11 +14,11 @@ public:
 
 	virtual ~PixelClusterDataAccess();
 
-	inline const xAOD::TrackParticleContainer* GetPixelClusterContainer() {
+	inline const xAOD::TrackMeasurementValidationContainer* GetPixelClusterContainer() {
 		return pixel_clusters_;
 	}
 
-	inline const xAOD::TrackParticleContainer* GetPixelClusterContainer() const {
+	inline const xAOD::TrackMeasurementValidationContainer* GetPixelClusterContainer() const {
 		return pixel_clusters_;
 	}	
 
@@ -33,6 +33,7 @@ protected:
 protected:
 	const xAOD::TrackMeasurementValidationContainer * pixel_clusters_; //!
 
+	ClassDef(PixelClusterDataAccess, 1);
 };
 
 

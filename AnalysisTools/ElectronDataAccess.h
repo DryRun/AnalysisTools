@@ -8,7 +8,7 @@
 #include "xAODTruth/TruthParticleContainer.h"
 #include "xAODCaloEvent/CaloClusterContainer.h"
 
-#include "Selectors/DataAccess.h"
+#include "AnalysisTools/DataAccess.h"
 
 class ElectronDataAccess : public virtual DataAccess {
 	/*** Methods ***/
@@ -71,6 +71,8 @@ protected:
 	const xAOD::TruthParticleContainer * egamma_truth_particles_; //!
 	const xAOD::CaloClusterContainer * egamma_clusters_; //!
 	const xAOD::CaloClusterContainer * forward_egamma_clusters_; //!
+
+	ClassDef(ElectronDataAccess, 1);
 };
 
 

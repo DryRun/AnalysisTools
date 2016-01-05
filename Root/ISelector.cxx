@@ -1,7 +1,7 @@
 #ifndef Selector_cxx
 #define Selector_cxx
 
-#include "Selectors/ISelector.h"
+#include "AnalysisTools/ISelector.h"
 #include <iostream>
 #include <iomanip>
 #include <cmath>

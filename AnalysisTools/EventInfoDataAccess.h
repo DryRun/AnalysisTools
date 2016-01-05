@@ -2,7 +2,7 @@
 #define EventInfoDataAccess_h
 
 #include "xAODEventInfo/EventInfo.h"
-#include "Selectors/DataAccess.h"
+#include "AnalysisTools/DataAccess.h"
 
 class EventInfoDataAccess : public virtual DataAccess {
 
@@ -29,6 +29,7 @@ protected:
 protected:
 	const xAOD::EventInfo* event_info_; //!
 
+	ClassDef(EventInfoDataAccess, 1);
 };
 
 

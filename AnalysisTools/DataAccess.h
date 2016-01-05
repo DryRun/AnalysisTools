@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include <TString.h>
+
 #include "xAODRootAccess/TEvent.h"
 
 class DataAccess {
@@ -43,17 +45,22 @@ public:
 		return event_;
 	}
 
+	inline void IgnoreBranch(TString p_branch) {
+		ignore_branch_[p_branch] = true;
+	}
+
 protected:
 
 /*** Members ***/
 protected:
 	DataSource data_source_; //!
 	xAOD::TEvent* event_; //!
+	std::map<TString, bool> ignore_branch_; //!
 
 
 private:
 
-
+	ClassDef(DataAccess, 1);
 };
 
 

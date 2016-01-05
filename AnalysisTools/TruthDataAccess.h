@@ -46,7 +46,7 @@ protected:
 	/**
 	 * Load a new event
 	 */
-	bool RetrieveTruths();
+	bool RetrieveTruth();
 
 
 	/*** Members ***/
@@ -56,6 +56,7 @@ protected:
 	const xAOD::TruthEventContainer * truth_events_; //!
 	const xAOD::TruthPileupEventContainer * truth_pileup_events_; //!
 
+	ClassDef(TruthDataAccess, 1);
 };
 
 

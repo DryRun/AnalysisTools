@@ -8,9 +8,9 @@
 #include "xAODTracking/TrackParticle.h"
 #include "xAODTracking/TrackParticlexAODHelpers.h"
 
-#include "Selectors/IObjectSelector.h"
-#include "Selectors/TrackCutFunctions.h"
-#include "Selectors/TrackDataAccess.h"
+#include "AnalysisTools/IObjectSelector.h"
+#include "AnalysisTools/TrackCutFunctions.h"
+#include "AnalysisTools/TrackDataAccess.h"
 
 class TrackSelector : public IObjectSelector {
 

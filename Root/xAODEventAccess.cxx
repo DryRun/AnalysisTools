@@ -1,7 +1,7 @@
 #ifndef xAODEventAccess_cxx
 #define xAODEventAccess_cxx
 
-#include "Selectors/xAODEventAccess.h"
+#include "AnalysisTools/xAODEventAccess.h"
 #include <iostream>
 #include <iomanip>
 #include <cmath>

@@ -16,9 +16,9 @@
 #include "TrackAnalysis/TrackTruthHelper.h"
 #include "RootUtils/Constants.h"
 
-#include "Selectors/EventInfoDataAccess.h"
-#include "Selectors/TrackDataAccess.h"
-#include "Selectors/TrackSelector.h"
+#include "AnalysisTools/EventInfoDataAccess.h"
+#include "AnalysisTools/TrackDataAccess.h"
+#include "AnalysisTools/TrackSelector.h"
 
 
 class TrackSelector;

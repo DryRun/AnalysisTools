@@ -1,7 +1,9 @@
 #ifndef DataAccess_cxx
 #define DataAccess_cxx
 
-#include "Selectors/DataAccess.h"
+#include "AnalysisTools/DataAccess.h"
+
+ClassImp(DataAccess)
 
 DataAccess::DataAccess() {
 	data_source_ = kCollisionData;

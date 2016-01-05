@@ -7,7 +7,7 @@
 #include "xAODTracking/TrackParticleContainer.h"
 #include "xAODTracking/TrackParticlexAODHelpers.h"
 
-#include "Selectors/DataAccess.h"
+#include "AnalysisTools/DataAccess.h"
 
 class TrackDataAccess : public virtual DataAccess {
 	/*** Methods ***/
@@ -36,6 +36,7 @@ protected:
 protected:
 	const xAOD::TrackParticleContainer * tracks_; //!
 
+	ClassDef(TrackDataAccess, 1);
 };
 
 
