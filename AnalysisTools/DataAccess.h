@@ -53,7 +53,7 @@ protected:
 
 /*** Members ***/
 protected:
-	DataSource data_source_; //!
+	DataSource data_source_;
 	xAOD::TEvent* event_; //!
 	std::map<TString, bool> ignore_branch_; //!
 
