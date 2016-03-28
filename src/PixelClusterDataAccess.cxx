@@ -1,7 +1,7 @@
 #ifndef PixelClusterDataAccess_cxx
 #define PixelClusterDataAccess_cxx
 
-#include "AnalysisTools/PixelClusterDataAccess.h"
+#include "MyTools/AnalysisTools/include/PixelClusterDataAccess.h"
 
 ClassImp(PixelClusterDataAccess)
 

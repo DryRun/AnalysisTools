@@ -23,8 +23,8 @@
 #include "EventLoop/Worker.h"
 #include "EventLoop/Algorithm.h"
 #include "RootUtils/SimpleConfiguration.h"
-#include "AnalysisTools/ISelector.h"
-#include "AnalysisTools/DataAccess.h"
+#include "MyTools/AnalysisTools/include/ISelector.h"
+#include "MyTools/AnalysisTools/include/DataAccess.h"
 
 class IObjectSelector : public ISelector {
 public:

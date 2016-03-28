@@ -8,7 +8,7 @@
 #include "xAODTruth/TruthParticleContainer.h"
 #include "xAODCaloEvent/CaloClusterContainer.h"
 
-#include "AnalysisTools/DataAccess.h"
+#include "MyTools/AnalysisTools/include/DataAccess.h"
 
 class ElectronDataAccess : public virtual DataAccess {
 	/*** Methods ***/

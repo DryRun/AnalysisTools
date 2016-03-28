@@ -8,7 +8,7 @@
 #include "xAODTruth/TruthEventContainer.h"
 #include "xAODTruth/TruthPileupEventContainer.h"
 
-#include "AnalysisTools/DataAccess.h"
+#include "MyTools/AnalysisTools/include/DataAccess.h"
 
 class TruthDataAccess : public virtual DataAccess {
 	/*** Methods ***/

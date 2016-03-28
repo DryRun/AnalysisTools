@@ -1,7 +1,7 @@
 #ifndef TruthDataAccess_cxx
 #define TruthDataAccess_cxx
 
-#include "AnalysisTools/TruthDataAccess.h"
+#include "MyTools/AnalysisTools/include/TruthDataAccess.h"
 
 ClassImp(TruthDataAccess)
 

@@ -2,7 +2,7 @@
 #define EventInfoDataAccess_h
 
 #include "xAODEventInfo/EventInfo.h"
-#include "AnalysisTools/DataAccess.h"
+#include "MyTools/AnalysisTools/include/DataAccess.h"
 
 class EventInfoDataAccess : public virtual DataAccess {
 

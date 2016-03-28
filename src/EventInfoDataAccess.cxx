@@ -1,7 +1,7 @@
 #ifndef EventInfoDataAccess_cxx
 #define EventInfoDataAccess_cxx
 
-#include "AnalysisTools/EventInfoDataAccess.h"
+#include "MyTools/AnalysisTools/include/EventInfoDataAccess.h"
 
 ClassImp(EventInfoDataAccess)
 

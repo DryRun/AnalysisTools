@@ -1,4 +1,4 @@
-#include "AnalysisTools/IObjectSelector.h"
+#include "MyTools/AnalysisTools/include/IObjectSelector.h"
 //#define DEBUG_IObjectSelector
 #define MAX_DEBUG 100
 
