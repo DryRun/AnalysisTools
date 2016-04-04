@@ -44,5 +44,12 @@ bool ObjectSelector::Pass(int i) {
 }
 
 void ObjectSelector::Reset() {
+	obj_pass_.clear();
+	obj_good_.clear();
+}
 
+void ObjectSelector::RegisterCut(TString p_cut_name, std::vector<TString> p_cut_descriptors, std::vector<double> p_cut_parameters) {
+	cut_list_.push_back(p_cut_name);
+	cut_descriptors_[p_cut_name] = p_cut_descriptors;
+	cut_parameters_[p_cut_name] = p_cut_parameters;
 }
