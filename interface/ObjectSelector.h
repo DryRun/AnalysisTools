@@ -5,7 +5,11 @@
 #include <map>
 #include <vector>
 
-#include 
+#include "TString.h"
+
+#include "FWCore/Framework/interface/EDAnalyzer.h"
+#include "DataFormats/PatCandidates/interface/Electron.h"
+#include "DataFormats/PatCandidates/interface/Jet.h"
 
 template <class T>
 class ObjectSelector {

@@ -11,12 +11,16 @@
 #include "TMath.h"
 #include "TPython.h"
 
-#include "MyTools/RootUtils/Constants.h"
-#include "MyTools/AnalysisTools/include/ObjectSelector.h"
-#include "DataFormats/​PatCandidates/​interface/​Jet.h"
+#include "MyTools/RootUtils/interface/Constants.h"
+#include "MyTools/AnalysisTools/interface/ObjectSelector.h"
+#include "DataFormats/PatCandidates/interface/Jet.h"
+
+template <class T>
+class ObjectSelector;
 
 namespace JetCutFunctions {
-	bool MinPt(const edm::Handle<std::vector<pat::Jet> > p_data, ObjectSelector* p_object_selector, int n);
+	template <class T>
+	bool MinPt(const edm::Handle<std::vector<pat::Jet> > p_data, ObjectSelector<T>* p_object_selector, int n);
 }
 
 #endif

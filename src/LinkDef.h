@@ -1,5 +1,3 @@
-#include "TROOT.h"
-
 #ifdef __CINT__
 
 #pragma link off all globals;
