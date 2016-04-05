@@ -11,34 +11,15 @@
 #include "DataFormats/PatCandidates/interface/Electron.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
 
+#include "MyTools/AnalysisTools/interface/Cutflow.h"
+#include "MyTools/AnalysisTools/interface/ObjectTypeEnums.h"
+
 template <class T>
-class ObjectSelector {
+class ObjectSelector : public Cutflow {
 public:
-	enum ObjectName {
-		kElectron,
-		kMuon,
-		kTau,
-		kJet,
-		kW,
-		kZ,
-		kHiggs,
-		kElectronNeutrino,
-		kMuonNeutrino,
-		kTauNeutrino,
-		kAnyNeutrino,
-		kNoObjectName,
-		kTrack
-	};
-
-	enum ObjectFakeType {
-		kNumerator,
-		kDenominator,
-		kUnspecified
-	};
-
 	// Index of cut functions
 	#ifndef __CINT__
-	typedef bool (*CutFunction)(const edm::Handle<std::vector<T> > p_data, ObjectSelector* p_object_selector, int n);
+	typedef bool (*CutFunction)(const edm::Handle<std::vector<T> >& p_data, ObjectSelector* p_object_selector, const int n);
  	std::map<TString, CutFunction> cut_functions_;
  	#endif
 
@@ -47,18 +28,24 @@ public:
 	~ObjectSelector();
 
 	/**
-	 * Configure the object selector
-	 * @param  p_cut_descriptors String-based cuts
-	 * @param  p_cut_parameters  Double-based cuts
-	 * @return                   true if everything succeeded
+	 * Configure the object selector. Defined explicitly for objects T, to create the correct map of cut functions.
+	 * @return	true if everything succeeded
 	 */
-	bool Configure(std::map<TString, std::vector<TString> > p_cut_descriptors, std::map<TString, std::vector<double> > p_cut_parameters);
+	bool Configure();
+
+	/**
+	 * Make sure the cut exists in the cut index, then register it with Cutflow::RegisterCut.
+	 * @param p_cut_name        Name
+	 * @param p_cut_descriptors String cuts
+	 * @param p_cut_parameters  Number cuts
+	 */
+	void RegisterCut(TString p_cut_name, std::vector<TString> p_cut_descriptors, std::vector<double> p_cut_parameters);
 
 	/**
 	 * Run selection on all objects in event.
 	 * @param p_data edm::Handle to the data.
 	 */
-	void ClassifyObjects(edm::Handle<std::vector<T> > p_data);
+	void ClassifyObjects(const edm::Handle<std::vector<T> > p_data);
 
 	/**
 	 * Get number of objects passing selection
@@ -75,17 +62,22 @@ public:
 		return obj_pass_;
 	}
 
+	inline std::vector<int>& GetGoodObjectIndices() {
+		return obj_good_;
+	}
+
 	inline bool GetObjectPass(int p_index) {
 		return obj_pass_[p_index];
 	}
 
-	inline std::vector<double>& GetCutParameters(TString p_cut_name) {
-		return cut_parameters_[p_cut_name];
+	inline const ObjectIdentifiers::ObjectType GetObjectType() {
+		return object_;
 	}
 
-	inline std::vector<TString>& GetCutDescriptors(TString p_cut_name) {
-		return cut_descriptors_[p_cut_name];
+	inline const edm::Handle<std::vector<T> > GetData() {
+		return data_;
 	}
+
 
 private:
 	/**
@@ -100,28 +92,18 @@ private:
 	 */
 	void Reset();
 
-	void RegisterCut(TString p_cut_name, std::vector<TString> p_cut_descriptors, std::vector<double> p_cut_parameters);
 public:
 
 private:
-	edm::EDGetTokenT<T> token_;
+	ObjectIdentifiers::ObjectType object_;
+	edm::Handle<std::vector<T> > data_;
 	std::map<int, bool> obj_pass_;
 	std::vector<int> obj_good_;
 
-	// Bookkeeping
-	std::vector<TString> cut_list_;
-	std::map<TString, std::vector<Double_t> > cut_parameters_;
-	std::map<TString, std::vector<TString> > cut_descriptors_;
-
-	std::map<TString, Int_t> cut_counter_; // Lists number of times a given cut is failed. Map is <cut> : <#fails>. Inclusive.
-	std::map<TString, Int_t> cutflow_counter_; // Cutflow counter. Map is <cut> : <#fails>. Exclusive.
-	std::map<TString, Int_t> pass_counter_; // Counts number of events that pass a given cut. Exclusive.
-
-
 };
 
-template <> bool ObjectSelector<pat::Jet>::Configure(std::map<TString, std::vector<TString> > p_cut_descriptors, std::map<TString, std::vector<double> > p_cut_parameters);
-template <> bool ObjectSelector<pat::Electron>::Configure(std::map<TString, std::vector<TString> > p_cut_descriptors, std::map<TString, std::vector<double> > p_cut_parameters);
+template <> bool ObjectSelector<pat::Jet>::Configure();
+template <> bool ObjectSelector<pat::Electron>::Configure();
 
 
 #endif

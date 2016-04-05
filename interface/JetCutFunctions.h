@@ -12,15 +12,17 @@
 #include "TPython.h"
 
 #include "MyTools/RootUtils/interface/Constants.h"
+//#include "MyTools/AnalysisTools/interface/EventSelector.h"
 #include "MyTools/AnalysisTools/interface/ObjectSelector.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
 
-template <class T>
-class ObjectSelector;
+template class ObjectSelector<pat::Jet>;
 
 namespace JetCutFunctions {
-	template <class T>
-	bool MinPt(const edm::Handle<std::vector<pat::Jet> > p_data, ObjectSelector<T>* p_object_selector, int n);
+	bool MinPt(const edm::Handle<std::vector<pat::Jet> >& p_data, ObjectSelector<pat::Jet>* p_object_selector, const int n);
+	bool MaxPt(const edm::Handle<std::vector<pat::Jet> >& p_data, ObjectSelector<pat::Jet>* p_object_selector, const int n);
+	bool MinAbsEta(const edm::Handle<std::vector<pat::Jet> >& p_data, ObjectSelector<pat::Jet>* p_object_selector, const int n);
+	bool MaxAbsEta(const edm::Handle<std::vector<pat::Jet> >& p_data, ObjectSelector<pat::Jet>* p_object_selector, const int n);
 }
 
 #endif

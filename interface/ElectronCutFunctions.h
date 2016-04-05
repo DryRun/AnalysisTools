@@ -15,12 +15,10 @@
 #include "MyTools/AnalysisTools/interface/ObjectSelector.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
 
-template <class T>
-class ObjectSelector;
+template class ObjectSelector<pat::Electron>;
 
 namespace ElectronCutFunctions {
-	template<class T>
-	bool MinPt(const edm::Handle<std::vector<pat::Electron> > p_data, ObjectSelector<T>* p_object_selector, int n);
+	bool MinPt(const edm::Handle<std::vector<pat::Electron> >& p_data, ObjectSelector<pat::Electron>* p_object_selector, const int n);
 }
 
 #endif

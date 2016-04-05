@@ -4,9 +4,8 @@
 #include "MyTools/AnalysisTools/interface/ElectronCutFunctions.h"
 
 namespace ElectronCutFunctions {
-	template<class T>
-	bool MinPt(const edm::Handle<std::vector<pat::Electron> > p_data, ObjectSelector<T>* p_object_selector, int n) {
-		return p_data->at(n).pt() > p_object_selector->GetCutParameters("MinPt")->at(0);
+	bool MinPt(const edm::Handle<std::vector<pat::Electron> >& p_data, ObjectSelector<pat::Electron>* p_object_selector, const int n) {
+		return p_data->at(n).pt() > p_object_selector->GetCutParameters("MinPt")[0];
 	}
 
 }
