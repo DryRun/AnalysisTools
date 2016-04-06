@@ -1,5 +1,12 @@
 # AnalysisTools
-Tools for performing event and object selections in an xAOD analysis. 
+Tools for performing event and object selections. From CMSSW_X_Y_Z/src, checkout with:
+
+git clone git@github.com:DryRun/AnalysisTools.git MyTools/AnalysisTools
+
+
+
+*** Old stuff below ***
+Branch ATLAS runs on xAODs with EventLoop. The analysis class must inherit from various DataAccess classes, in order for the Selector classes to see the data. 
 
 DATA ACCESS:
 To use the object selector classes, the analysis code (e.g. the EL::Algorithm) is required to inherit from various DataAccess classes, which load the xAOD event data. Each class must have a RetrieveX function, which is called at the start of EL::Algorithm::execute() to load the data. The CutFunctions then cast the DataAccess object to the appropriate subclass, e.g. ElectronDataAccess, to read the current event data. 
