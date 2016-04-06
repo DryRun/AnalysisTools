@@ -1,0 +1,14 @@
+<use   name="FWCore/ServiceRegistry"/>
+<use   name="DataFormats/PatCandidates"/>
+<use   name="FWCore/Framework"/>
+<use   name="CommonTools/UtilAlgos"/>
+<use   name="MyTools/RootUtils"/>
+<use   name="boost"/>
+<use   name="rootcore"/>
+<use   name="roothistmatrix"/>
+<use   name="roottmva"/>
+<use   name="rootxml"/>
+<use   name="rootmath"/>
+<export>
+  <lib   name="1"/>
+</export>
