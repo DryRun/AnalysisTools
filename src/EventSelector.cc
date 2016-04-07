@@ -17,7 +17,7 @@ void EventSelector::Configure() {
 	cut_functions_["MaxNJets"]        = &EventCutFunctions::MaxNJets;
 
 	SetName("DefaultEventSelection");
-	SetObject("Event");
+	SetObjectName("Event");
 }
 
 void EventSelector::RegisterCut(TString p_cut_name, std::vector<TString> p_cut_descriptors, std::vector<double> p_cut_parameters) {
