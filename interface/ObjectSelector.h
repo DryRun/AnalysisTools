@@ -14,6 +14,7 @@
 #include "MyTools/AnalysisTools/interface/Cutflow.h"
 #include "MyTools/AnalysisTools/interface/ObjectTypeEnums.h"
 
+// T = pointer or pointer-like to data, e.g. edm::Handle<>
 template <class T>
 class ObjectSelector : public Cutflow {
 public:
@@ -33,9 +34,7 @@ public:
 	 */
 	//bool Configure();
 	
-	 void AddCutFunction(TString p_cut_name, CutFunction p_cut_function) {
-	 	cut_functions_[p_cut_name] = p_cut_function
-	 }
+	 void AddCutFunction(TString p_cut_name, CutFunction p_cut_function);
 
 	/**
 	 * Make sure the cut exists in the cut index, then register it with Cutflow::RegisterCut.

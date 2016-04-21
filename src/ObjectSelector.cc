@@ -29,6 +29,12 @@ ObjectSelector<T>::~ObjectSelector() {}
 //}
 
 template<class T>
+void ObjectSelector<T>::AddCutFunction(TString p_cut_name, CutFunction p_cut_function) {
+	cut_functions_[p_cut_name] = p_cut_function;
+}
+
+
+template<class T>
 void ObjectSelector<T>::RegisterCut(TString p_cut_name, std::vector<TString> p_cut_descriptors, std::vector<double> p_cut_parameters) {
 	if (cut_functions_.find(p_cut_name) == cut_functions_.end()) {
 		std::cerr << "[ObjectSelector] ERROR : Unknown cut " << p_cut_name << ". Please add it to the index in the appropriate ObjectSelector<T>::Configure() function." << std::endl;
@@ -39,7 +45,7 @@ void ObjectSelector<T>::RegisterCut(TString p_cut_name, std::vector<TString> p_c
 
 
 template<class T>
-void ObjectSelector<T>::ClassifyObjects(const edm::Handle<std::vector<T> > p_data) {
+void ObjectSelector<T>::ClassifyObjects(const T p_data) {
 	Reset();
 	data_ = p_data;
 	for (unsigned int i = 0; i < p_data->size(); ++i) {
