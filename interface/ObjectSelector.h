@@ -13,10 +13,11 @@
 
 #include "MyTools/AnalysisTools/interface/Cutflow.h"
 #include "MyTools/AnalysisTools/interface/ObjectTypeEnums.h"
+#include "MyTools/AnalysisTools/interface/ObjectSelectorResults.h"
 
 
 template <class T>
-class ObjectSelector : public Cutflow {
+class ObjectSelector : public Cutflow, public ObjectSelectorResults {
 public:
 	// Index of cut functions
 	#ifndef __CINT__
@@ -50,40 +51,14 @@ public:
 	 */
 	void ClassifyObjects(const std::vector<T>& p_data);
 
-	/**
-	 * Get number of objects passing selection
-	 * @return Number of objects passing selection
-	 */
-	inline int GetNumberOfGoodObjects() {
-		return obj_good_.size();
-	}
-
-	/**
-	 * Get map of whether each object passes selection
-	 */
-	inline std::map<int, bool>& GetGoodObjectMap() {
-		return obj_pass_;
-	}
-
-	inline std::vector<int>& GetGoodObjectIndices() {
-		return obj_good_;
-	}
-
-	inline bool GetObjectPass(int p_index) {
-		return obj_pass_[p_index];
-	}
-
 	inline const ObjectIdentifiers::ObjectType GetObjectType() {
 		return object_;
 	}
 
-	inline const std::vector<T>* GetData() {
-		return data_;
-	}
-
-	inline void SetObject(ObjectIdentifiers::ObjectType p_object) {
+	inline void SetObjectType(ObjectIdentifiers::ObjectType p_object) {
 		object_ = p_object;
 	}
+
 
 private:
 	/**
@@ -103,8 +78,6 @@ public:
 private:
 	ObjectIdentifiers::ObjectType object_;
 	const std::vector<T>* data_;
-	std::map<int, bool> obj_pass_;
-	std::vector<int> obj_good_;
 
 };
 //template <> bool ObjectSelector<edm::Handle<std::vector<pat::Jet> > >::Configure();
