@@ -1,6 +1,6 @@
 #include "MyTools/AnalysisTools/interface/ObjectSelector.h"
-#include "MyTools/AnalysisTools/interface/JetCutFunctions.h"
-#include "MyTools/AnalysisTools/interface/ElectronCutFunctions.h"
+//#include "MyTools/AnalysisTools/interface/JetCutFunctions.h"
+//#include "MyTools/AnalysisTools/interface/ElectronCutFunctions.h"
 
 template<class T>
 ObjectSelector<T>::ObjectSelector() {
@@ -10,23 +10,23 @@ ObjectSelector<T>::ObjectSelector() {
 template<class T>
 ObjectSelector<T>::~ObjectSelector() {}
 
-template <> bool ObjectSelector<pat::Jet>::Configure() {
-	cut_functions_["MinPt"] = &JetCutFunctions::MinPt;
-	cut_functions_["MaxAbsEta"] = &JetCutFunctions::MaxAbsEta;
+//template <> bool ObjectSelector<pat::Jet>::Configure() {
+//	cut_functions_["MinPt"] = &JetCutFunctions::MinPt;
+//	cut_functions_["MaxAbsEta"] = &JetCutFunctions::MaxAbsEta;
+//
+//	object_ = ObjectIdentifiers::kJet;
+//	SetName("DefaultJetSelection");
+//	SetObjectName("Jet");
+//	return true;
+//}
 
-	object_ = ObjectIdentifiers::kJet;
-	SetName("DefaultJetSelection");
-	SetObjectName("Jet");
-	return true;
-}
-
-template <> bool ObjectSelector<pat::Electron>::Configure() {
-	cut_functions_["MinPt"] = &ElectronCutFunctions::MinPt;
-	object_ = ObjectIdentifiers::kElectron;
-	SetName("DefaultElectronSelection");
-	SetObjectName("Electron");
-	return true;
-}
+//template <> bool ObjectSelector<pat::Electron>::Configure() {
+//	cut_functions_["MinPt"] = &ElectronCutFunctions::MinPt;
+//	object_ = ObjectIdentifiers::kElectron;
+//	SetName("DefaultElectronSelection");
+//	SetObjectName("Electron");
+//	return true;
+//}
 
 template<class T>
 void ObjectSelector<T>::RegisterCut(TString p_cut_name, std::vector<TString> p_cut_descriptors, std::vector<double> p_cut_parameters) {

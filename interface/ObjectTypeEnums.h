@@ -23,6 +23,17 @@ namespace ObjectIdentifiers {
 		kDenominator,
 		kUnspecified
 	};
+
+	enum JetAlgorithm {
+		kAK5,
+		kAK7
+	};
+
+	enum JetType {
+		kCalo,
+		kPF,
+		kGen
+	};
 }
 
 #endif

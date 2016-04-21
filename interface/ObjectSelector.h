@@ -8,8 +8,8 @@
 #include "TString.h"
 
 #include "FWCore/Framework/interface/EDAnalyzer.h"
-#include "DataFormats/PatCandidates/interface/Electron.h"
-#include "DataFormats/PatCandidates/interface/Jet.h"
+//#include "DataFormats/PatCandidates/interface/Electron.h"
+//#include "DataFormats/PatCandidates/interface/Jet.h"
 
 #include "MyTools/AnalysisTools/interface/Cutflow.h"
 #include "MyTools/AnalysisTools/interface/ObjectTypeEnums.h"
@@ -19,7 +19,7 @@ class ObjectSelector : public Cutflow {
 public:
 	// Index of cut functions
 	#ifndef __CINT__
-	typedef bool (*CutFunction)(const edm::Handle<std::vector<T> >& p_data, ObjectSelector* p_object_selector, const int n);
+	typedef bool (*CutFunction)(const T& p_data, ObjectSelector* p_object_selector, const int n);
  	std::map<TString, CutFunction> cut_functions_;
  	#endif
 
@@ -31,7 +31,11 @@ public:
 	 * Configure the object selector. Defined explicitly for objects T, to create the correct map of cut functions.
 	 * @return	true if everything succeeded
 	 */
-	bool Configure();
+	//bool Configure();
+	
+	 void AddCutFunction(TString p_cut_name, CutFunction p_cut_function) {
+	 	cut_functions_[p_cut_name] = p_cut_function
+	 }
 
 	/**
 	 * Make sure the cut exists in the cut index, then register it with Cutflow::RegisterCut.
@@ -45,7 +49,7 @@ public:
 	 * Run selection on all objects in event.
 	 * @param p_data edm::Handle to the data.
 	 */
-	void ClassifyObjects(const edm::Handle<std::vector<T> > p_data);
+	void ClassifyObjects(const T p_data);
 
 	/**
 	 * Get number of objects passing selection
@@ -74,7 +78,7 @@ public:
 		return object_;
 	}
 
-	inline const edm::Handle<std::vector<T> > GetData() {
+	inline const T GetData() {
 		return data_;
 	}
 
@@ -96,14 +100,13 @@ public:
 
 private:
 	ObjectIdentifiers::ObjectType object_;
-	edm::Handle<std::vector<T> > data_;
+	T data_;
 	std::map<int, bool> obj_pass_;
 	std::vector<int> obj_good_;
 
 };
-
-template <> bool ObjectSelector<pat::Jet>::Configure();
-template <> bool ObjectSelector<pat::Electron>::Configure();
+//template <> bool ObjectSelector<edm::Handle<std::vector<pat::Jet> > >::Configure();
+//template <> bool ObjectSelector<edm::Handle<std::vector<pat::Electron> > >::Configure();
 
 
 #endif
