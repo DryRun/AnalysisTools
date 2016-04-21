@@ -19,10 +19,12 @@
 template class ObjectSelector<pat::Jet>;
 
 namespace JetCutFunctions {
-	bool MinPt(const edm::Handle<std::vector<pat::Jet> >& p_data, ObjectSelector<pat::Jet>* p_object_selector, const int n);
-	bool MaxPt(const edm::Handle<std::vector<pat::Jet> >& p_data, ObjectSelector<pat::Jet>* p_object_selector, const int n);
-	bool MinAbsEta(const edm::Handle<std::vector<pat::Jet> >& p_data, ObjectSelector<pat::Jet>* p_object_selector, const int n);
-	bool MaxAbsEta(const edm::Handle<std::vector<pat::Jet> >& p_data, ObjectSelector<pat::Jet>* p_object_selector, const int n);
+	bool MinPt(const std::vector<pat::Jet>& p_data, ObjectSelector<pat::Jet>* p_object_selector, const int n);
+	bool MaxPt(const std::vector<pat::Jet>& p_data, ObjectSelector<pat::Jet>* p_object_selector, const int n);
+	bool MinAbsEta(const std::vector<pat::Jet>& p_data, ObjectSelector<pat::Jet>* p_object_selector, const int n);
+	bool MaxAbsEta(const std::vector<pat::Jet>& p_data, ObjectSelector<pat::Jet>* p_object_selector, const int n);
+
+	void Configure(ObjectSelector<pat::Jet>* p_selector);
 }
 
 #endif
