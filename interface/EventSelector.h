@@ -10,6 +10,8 @@
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
+#include "DataFormats/PatCandidates/interface/Electron.h"
+#include "DataFormats/PatCandidates/interface/Jet.h"
 
 #include "MyTools/AnalysisTools/interface/ObjectTypeEnums.h"
 #include "MyTools/AnalysisTools/interface/ObjectSelector.h"

@@ -28,6 +28,13 @@ public:
 	~ObjectSelector();
 
 	/**
+	 * Add a CutFunction to the index of known cut functions. This should be done in the "Configure" function in the same file that implements the cut function.
+	 * @param p_cut_name     Name of cut
+	 * @param p_cut_function CutFunction pointer thingy
+	 */
+	 void AddCutFunction(TString p_cut_name, CutFunction p_cut_function);
+
+	/**
 	 * Configure the object selector. Defined explicitly for objects T, to create the correct map of cut functions.
 	 * @return	true if everything succeeded
 	 */
@@ -78,6 +85,9 @@ public:
 		return data_;
 	}
 
+	inline void SetObject(ObjectIdentifiers::ObjectType p_object) {
+		object_ = p_object;
+	}
 
 private:
 	/**
@@ -96,7 +106,7 @@ public:
 
 private:
 	ObjectIdentifiers::ObjectType object_;
-	const edm::Handle<std::vector<T> >* data_;
+	const std::vector<T>* data_;
 	std::map<int, bool> obj_pass_;
 	std::vector<int> obj_good_;
 
@@ -111,6 +121,11 @@ template<class T>
 ObjectSelector<T>::~ObjectSelector() {}
 
 template<class T>
+void ObjectSelector<T>::AddCutFunction(TString p_cut_name, CutFunction p_cut_function) {
+	cut_functions_[p_cut_name] = p_cut_function;
+}
+
+template<class T>
 void ObjectSelector<T>::RegisterCut(TString p_cut_name, std::vector<TString> p_cut_descriptors, std::vector<double> p_cut_parameters) {
 	if (cut_functions_.find(p_cut_name) == cut_functions_.end()) {
 		std::cerr << "[ObjectSelector] ERROR : Unknown cut " << p_cut_name << ". Please add it to the index in the appropriate ObjectSelector<T>::Configure() function." << std::endl;
@@ -121,10 +136,10 @@ void ObjectSelector<T>::RegisterCut(TString p_cut_name, std::vector<TString> p_c
 
 
 template<class T>
-void ObjectSelector<T>::ClassifyObjects(const edm::Handle<std::vector<T> > p_data) {
+void ObjectSelector<T>::ClassifyObjects(const std::vector<T>& p_data) {
 	Reset();
-	data_ = p_data;
-	for (unsigned int i = 0; i < p_data->size(); ++i) {
+	data_ = &p_data;
+	for (unsigned int i = 0; i < p_data.size(); ++i) {
 		obj_pass_[i] = Pass(i);
 		if (obj_pass_[i]) {
 			obj_good_.push_back(i);
@@ -137,7 +152,7 @@ bool ObjectSelector<T>::Pass(int i) {
 	++pass_calls_;
 	bool this_pass = true;
 	for (auto & it_cut : cut_list_) {
-		if (!cut_functions_[it_cut](data_, this, i)) {
+		if (!cut_functions_[it_cut](*data_, this, i)) {
 			if (this_pass) {
 				this_pass = false;
 				cutflow_counter_[it_cut]++;

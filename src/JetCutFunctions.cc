@@ -5,16 +5,16 @@
 
 namespace JetCutFunctions {
 	bool MinPt(const std::vector<pat::Jet>& p_data, ObjectSelector<pat::Jet>* p_object_selector, const int n) {
-		return p_data->at(n).pt() >= p_object_selector->GetCutParameters("MinPt")[0];
+		return p_data[n].pt() >= p_object_selector->GetCutParameters("MinPt")[0];
 	}
 	bool MaxPt(const std::vector<pat::Jet>& p_data, ObjectSelector<pat::Jet>* p_object_selector, const int n) {
-		return p_data->at(n).pt() <= p_object_selector->GetCutParameters("MaxPt")[0];
+		return p_data[n].pt() <= p_object_selector->GetCutParameters("MaxPt")[0];
 	}
 	bool MinAbsEta(const std::vector<pat::Jet>& p_data, ObjectSelector<pat::Jet>* p_object_selector, const int n) {
-		return TMath::Abs(p_data->at(n).eta()) >= p_object_selector->GetCutParameters("MinAbsEta")[0];
+		return TMath::Abs(p_data[n].eta()) >= p_object_selector->GetCutParameters("MinAbsEta")[0];
 	}
 	bool MaxAbsEta(const std::vector<pat::Jet>& p_data, ObjectSelector<pat::Jet>* p_object_selector, const int n) {
-		return TMath::Abs(p_data->at(n).eta()) <= p_object_selector->GetCutParameters("MaxAbsEta")[0];
+		return TMath::Abs(p_data[n].eta()) <= p_object_selector->GetCutParameters("MaxAbsEta")[0];
 	}
 
 	void Configure(ObjectSelector<pat::Jet>* p_selector) {
@@ -24,7 +24,7 @@ namespace JetCutFunctions {
 		p_selector->AddCutFunction("MaxAbsEta", &MaxAbsEta);
 
 		p_selector->SetObjectName("Jet");
-		p_selector->SetObject(ObjectIdentifiers::Jet);
+		p_selector->SetObject(ObjectIdentifiers::kJet);
 	}
 
 }
