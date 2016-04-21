@@ -14,13 +14,13 @@
 #include "MyTools/AnalysisTools/interface/Cutflow.h"
 #include "MyTools/AnalysisTools/interface/ObjectTypeEnums.h"
 
-// T = pointer or pointer-like to data, e.g. edm::Handle<>
+
 template <class T>
 class ObjectSelector : public Cutflow {
 public:
 	// Index of cut functions
 	#ifndef __CINT__
-	typedef bool (*CutFunction)(const T& p_data, ObjectSelector* p_object_selector, const int n);
+	typedef bool (*CutFunction)(const std::vector<T>& p_data, ObjectSelector* p_object_selector, const int n);
  	std::map<TString, CutFunction> cut_functions_;
  	#endif
 
@@ -48,7 +48,7 @@ public:
 	 * Run selection on all objects in event.
 	 * @param p_data edm::Handle to the data.
 	 */
-	void ClassifyObjects(const T p_data);
+	void ClassifyObjects(const std::vector<T>& p_data);
 
 	/**
 	 * Get number of objects passing selection
@@ -77,10 +77,13 @@ public:
 		return object_;
 	}
 
-	inline const T GetData() {
+	inline const std::vector<T>* GetData() {
 		return data_;
 	}
 
+	inline void SetObject(ObjectIdentifiers::ObjectType p_object) {
+		object_ = p_object;
+	}
 
 private:
 	/**
@@ -99,7 +102,7 @@ public:
 
 private:
 	ObjectIdentifiers::ObjectType object_;
-	T data_;
+	const std::vector<T>* data_;
 	std::map<int, bool> obj_pass_;
 	std::vector<int> obj_good_;
 
@@ -107,5 +110,83 @@ private:
 //template <> bool ObjectSelector<edm::Handle<std::vector<pat::Jet> > >::Configure();
 //template <> bool ObjectSelector<edm::Handle<std::vector<pat::Electron> > >::Configure();
 
+template<class T>
+ObjectSelector<T>::ObjectSelector() {
+	object_ = ObjectIdentifiers::kNoObjectName;
+}
+
+template<class T>
+ObjectSelector<T>::~ObjectSelector() {}
+
+//template <> bool ObjectSelector<pat::Jet>::Configure() {
+//	cut_functions_["MinPt"] = &JetCutFunctions::MinPt;
+//	cut_functions_["MaxAbsEta"] = &JetCutFunctions::MaxAbsEta;
+//
+//	object_ = ObjectIdentifiers::kJet;
+//	SetName("DefaultJetSelection");
+//	SetObjectName("Jet");
+//	return true;
+//}
+
+//template <> bool ObjectSelector<pat::Electron>::Configure() {
+//	cut_functions_["MinPt"] = &ElectronCutFunctions::MinPt;
+//	object_ = ObjectIdentifiers::kElectron;
+//	SetName("DefaultElectronSelection");
+//	SetObjectName("Electron");
+//	return true;
+//}
+
+template<class T>
+void ObjectSelector<T>::AddCutFunction(TString p_cut_name, CutFunction p_cut_function) {
+	cut_functions_[p_cut_name] = p_cut_function;
+}
+
+
+template<class T>
+void ObjectSelector<T>::RegisterCut(TString p_cut_name, std::vector<TString> p_cut_descriptors, std::vector<double> p_cut_parameters) {
+	if (cut_functions_.find(p_cut_name) == cut_functions_.end()) {
+		std::cerr << "[ObjectSelector] ERROR : Unknown cut " << p_cut_name << ". Please add it to the index in the appropriate ObjectSelector<T>::Configure() function." << std::endl;
+		exit(1);
+	}
+	Cutflow::RegisterCut(p_cut_name, p_cut_descriptors, p_cut_parameters);
+}
+
+
+template<class T>
+void ObjectSelector<T>::ClassifyObjects(const std::vector<T>& p_data) {
+	Reset();
+	data_ = &p_data;
+	for (unsigned int i = 0; i < p_data.size(); ++i) {
+		obj_pass_[i] = Pass(i);
+		if (obj_pass_[i]) {
+			obj_good_.push_back(i);
+		}
+	}
+}
+
+template<class T>
+bool ObjectSelector<T>::Pass(int i) {
+	++pass_calls_;
+	bool this_pass = true;
+	for (auto & it_cut : cut_list_) {
+		if (!cut_functions_[it_cut](*data_, this, i)) {
+			if (this_pass) {
+				this_pass = false;
+				cutflow_counter_[it_cut]++;
+			}
+			cut_counter_[it_cut]++;
+		}
+		if (this_pass) {
+			pass_counter_[it_cut]++;
+		}
+	}
+	return this_pass;
+}
+
+template<class T>
+void ObjectSelector<T>::Reset() {
+	obj_pass_.clear();
+	obj_good_.clear();
+}
 
 #endif
