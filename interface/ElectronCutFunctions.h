@@ -18,7 +18,11 @@
 template class ObjectSelector<pat::Electron>;
 
 namespace ElectronCutFunctions {
-	bool MinPt(const edm::Handle<std::vector<pat::Electron> >& p_data, ObjectSelector<pat::Electron>* p_object_selector, const int n);
+	bool MinPt(const std::vector<pat::Electron>& p_data, ObjectSelector<pat::Electron>* p_object_selector, const int n);
+	bool MaxPt(const std::vector<pat::Electron>& p_data, ObjectSelector<pat::Electron>* p_object_selector, const int n);
+	bool MinAbsEta(const std::vector<pat::Electron>& p_data, ObjectSelector<pat::Electron>* p_object_selector, const int n);
+	bool MaxAbsEta(const std::vector<pat::Electron>& p_data, ObjectSelector<pat::Electron>* p_object_selector, const int n);
+	void Configure(ObjectSelector<pat::Electron>* p_selector);
 }
 
 #endif
