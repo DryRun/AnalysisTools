@@ -36,6 +36,13 @@ public:
 	void Configure();
 
 	/**
+	 * Add a CutFunction to the index
+	 * @param p_cut_name     Name of cut
+	 * @param p_cut_function &FunctionName
+	 */
+	void AddCutFunction(TString p_cut_name, CutFunction p_cut_function);
+
+	/**
 	 * Make sure the cut exists in the cut index, then register it with Cutflow::RegisterCut.
 	 * @param p_cut_name        Name
 	 * @param p_cut_descriptors String cuts
@@ -92,6 +99,12 @@ EventSelector<T>::~EventSelector() {}
 //	SetName("DefaultEventSelection");
 //	SetObjectName("Event");
 //}
+
+template<class T>
+void EventSelector<T>::AddCutFunction(TString p_cut_name, CutFunction p_cut_function) {
+	cut_functions_[p_cut_name] = p_cut_function;
+}
+
 
 template<class T>
 void EventSelector<T>::RegisterCut(TString p_cut_name, std::vector<TString> p_cut_descriptors, std::vector<double> p_cut_parameters) {
