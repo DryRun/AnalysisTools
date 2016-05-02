@@ -35,7 +35,7 @@ void EventSelector::ProcessEvent(const edm::Event* p_event, edm::Handle<std::vec
 	++pass_calls_;
 	bool this_pass = true;
 	for (auto & it_cut : cut_list_) {
-		if (!cut_functions_[it_cut](this)) {
+		if (!cut_functions_[it_cut](event_, this)) {
 			if (this_pass) {
 				this_pass = false;
 				cutflow_counter_[it_cut]++;
@@ -52,6 +52,7 @@ void EventSelector::ProcessEvent(const edm::Event* p_event, edm::Handle<std::vec
 void EventSelector::Reset() {
 	event_ = 0;
 	vertices_ = 0;
+	cut_return_data_.clear();
 }
 
 #endif

@@ -57,13 +57,36 @@ public:
 		object_selectors_[p_object_type] = p_object_selector;
 	}
 
+	inline ObjectSelectorResults* GetObjectSelector(ObjectIdentifiers::ObjectType p_object_type) {
+		if (object_selectors_.find(p_object_type) == object_selectors_.end()) {
+			std::cerr << "[EventSelector::GetObjectSelector] ERROR : Unknown object type" << std::endl;
+			exit(1);
+		}
+		return object_selectors_[p_object_type];
+	}
+
+	/**
+	 * Accessor to underlying ObjectSelector::GetObjectPass. 
+	 * @param  p_object_type ObjectIdentifier for the ObjectSelector
+	 * @param  n             Index of object
+	 * @return               True if object[n] passes the ObjectSelector selection. Return false if the index n is outside the range.
+	 */
+	bool GetObjectPass(ObjectIdentifiers::ObjectType p_object_type, unsigned int n);
+
+	/**
+	 * Accessot to underlying ObjectSelector::GetNumberOfGoodObjects
+	 * @param  p_object_type ObjectIdentifier for the ObjectSelector
+	 * @return               ObjectSelector::GetNumberOfGoodObjects()
+	 */
+	unsigned int GetNumberOfGoodObjects(ObjectIdentifiers::ObjectType p_object_type);
+
 	inline const T* GetEvent() {
 		return event_;
 	}
 
 	void ProcessEvent(const T* p_event);
 
-	inline bool GetEventPass() {
+	inline bool Pass() {
 		return event_good_;
 	}
 
@@ -79,6 +102,8 @@ private:
 	const T* event_;
 	std::map<ObjectIdentifiers::ObjectType, ObjectSelectorResults*> object_selectors_;
 	bool event_good_;
+	std::map<TString, bool> cut_results_;
+
 };
 
 template<class T>
@@ -122,7 +147,8 @@ void EventSelector<T>::ProcessEvent(const T* p_event) {
 	++pass_calls_;
 	bool this_pass = true;
 	for (auto & it_cut : cut_list_) {
-		if (!cut_functions_[it_cut](*event_, this)) {
+		cut_results_[it_cut] = cut_functions_[it_cut](*event_, this);
+		if (!cut_results_[it_cut]) {
 			if (this_pass) {
 				this_pass = false;
 				cutflow_counter_[it_cut]++;
@@ -134,11 +160,57 @@ void EventSelector<T>::ProcessEvent(const T* p_event) {
 		}
 	}
 	event_good_ = this_pass;
+
+	// N-1 histograms
+	for (auto& it_cut : cut_list_) {
+		if (histograms_nminusone_.find(it_cut) != histograms_nminusone_.end()) {
+			if (return_data_.find(it_cut) != return_data_.end()) {
+				// Calculate N - 1
+				bool pass_nminusone = true;
+				for (auto& it_cut2 : cut_list_) {
+					if (it_cut == it_cut2) {
+						continue;
+					}
+					pass_nminusone = pass_nminusone && cut_results_[it_cut2];
+				}
+				if (pass_nminusone) {
+					histograms_nminusone_[it_cut]->Fill(return_data_[it_cut]);
+				}
+			}
+		}
+	}
 }
 
 template<class T>
 void EventSelector<T>::Reset() {
 	event_ = 0;
+	return_data_.clear();
+	cut_results_.clear();
 }
+
+template<class T>
+bool EventSelector<T>::GetObjectPass(ObjectIdentifiers::ObjectType p_object_type, unsigned int n) {
+	if (object_selectors_.find(p_object_type) == object_selectors_.end()) {
+		std::cerr << "[EventSelector::GetObjectPass] ERROR : Unknown object type." << std::endl;
+		exit(1);
+	}
+	bool pass = true;
+	if (n >= object_selectors_[p_object_type]->GetTotalNumberOfObjects()) {
+		pass = false;
+	} else {
+		pass = object_selectors_[p_object_type]->GetObjectPass(n);
+	}
+	return pass;
+}
+
+template<class T>
+unsigned int EventSelector<T>::GetNumberOfGoodObjects(ObjectIdentifiers::ObjectType p_object_type) {
+	if (object_selectors_.find(p_object_type) == object_selectors_.end()) {
+		std::cerr << "[EventSelector::GetObjectPass] ERROR : Unknown object type." << std::endl;
+		exit(1);
+	}
+	return object_selectors_[p_object_type]->GetNumberOfGoodObjects();
+}
+
 
 #endif

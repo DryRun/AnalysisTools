@@ -135,6 +135,7 @@ void ObjectSelector<T>::ClassifyObjects(const std::vector<T>& p_data) {
 			obj_good_.push_back(i);
 		}
 	}
+	n_obj_ = p_data.size();
 }
 
 template<class T>

@@ -7,7 +7,9 @@ Cutflow::Cutflow() {
 	pass_calls_ = 0;
 }
 
-Cutflow::~Cutflow() {}
+Cutflow::~Cutflow() {
+	histograms_nminusone_.clear();
+}
 
 void Cutflow::RegisterCut(TString p_cut_name, std::vector<TString> p_cut_descriptors, std::vector<double> p_cut_parameters) {
 	cut_list_.push_back(p_cut_name);
@@ -56,7 +58,16 @@ void Cutflow::MakeCutflowHistograms(TFileService *p_fs) {
 
 		++bin;
 	}
-
 }
+
+void Cutflow::SaveNMinusOneHistogram(TFileService *p_fs) {
+	p_fs.cd()
+	for (auto& it_cut : cut_list_) {
+		if (histograms_nminusone_.find(it_cut) != histograms_nminusone_.end()) {
+			histograms_nminusone_[it_cut].Write();
+		}
+	}
+}
+
 
 #endif

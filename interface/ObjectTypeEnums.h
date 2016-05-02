@@ -8,6 +8,8 @@ namespace ObjectIdentifiers {
 		kMuon,
 		kTau,
 		kJet,
+		kPFJet,
+		kCaloJet,
 		kW,
 		kZ,
 		kHiggs,
