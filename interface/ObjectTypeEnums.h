@@ -36,6 +36,11 @@ namespace ObjectIdentifiers {
 		kPF,
 		kGen
 	};
+
+	enum DataSource {
+		kCollisionData,
+		kSimulation
+	};
 }
 
 #endif
