@@ -9,6 +9,8 @@
 #include "TH1.h"
 #include "TH1D.h"
 #include "TH1F.h"
+#include "TH2D.h"
+#include "TH2F.h"
 
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 
@@ -56,6 +58,17 @@ public:
 	 * @param p_xmax         X axis max
 	 */
 	virtual void AddNMinusOneHistogram(TString p_cut_name, TString p_x_axis_title, int p_nbins, double p_xmin, double p_xmax);
+
+	/**
+	 * Add a N-1 histogram for a cut (note that the cut should be registered with RegisterCut) vs. another variable
+	 * @param p_cut_name     Cut name
+	 * @param p_second_var_name Second variable name
+	 * @param p_x_axis_title X axis title
+	 * @param p_nbins        X axis number of bins
+	 * @param p_xmin         X axis min
+	 * @param p_xmax         X axis max
+	 */
+	virtual void AddNMinusOne2DHistogram(TString p_cut_name, TString p_second_var_name, TString p_x_axis_title, int p_nxbins, double p_xmin, double p_xmax, TString p_y_axis_title, int p_nybins, double p_ymin, double p_ymax);
 
 	inline std::vector<double>& GetCutParameters(TString p_cut_name) {
 		if (cut_parameters_.find(p_cut_name) == cut_parameters_.end()) {
@@ -111,6 +124,7 @@ protected:
 
 	std::map<TString, double> return_data_;
 	std::map<TString, TH1D*> histograms_nminusone_; // Container for storing any N-1 histograms if desired
+	std::map<TString, std::map<TString, TH2D*> > histograms_nminusone_2D_; // Container for storing any N-1 histograms if desired
 
 	// Cutflow counter
 	unsigned int pass_calls_;
@@ -127,6 +141,7 @@ inline Cutflow::Cutflow() {
 
 inline Cutflow::~Cutflow() {
 	histograms_nminusone_.clear();
+	histograms_nminusone_2D_.clear();
 }
 
 inline void Cutflow::RegisterCut(TString p_cut_name, std::vector<TString> p_cut_descriptors, std::vector<double> p_cut_parameters) {
@@ -149,6 +164,16 @@ inline void Cutflow::AddNMinusOneHistogram(TString p_cut_name, TString p_x_axis_
 	histograms_nminusone_[p_cut_name] = new TH1D("h_nminusone_" + p_cut_name, "h_nminusone_" + p_cut_name, p_nbins, p_xmin, p_xmax);
 	histograms_nminusone_[p_cut_name]->SetDirectory(0);
 	histograms_nminusone_[p_cut_name]->Sumw2();
+	histograms_nminusone_[p_cut_name]->GetXaxis()->SetTitle(p_x_axis_title);
+}
+
+inline void Cutflow::AddNMinusOne2DHistogram(TString p_cut_name, TString p_second_var_name, TString p_x_axis_title, int p_nxbins, double p_xmin, double p_xmax, TString p_y_axis_title, int p_nybins, double p_ymin, double p_ymax) {
+	std::cout << "[Cutflow::AddNMinusOne2DHistogram] DEBUG : Adding N-1 2D histogram for " << p_cut_name << " vs " << p_second_var_name << std::endl;
+	histograms_nminusone_2D_[p_cut_name][p_second_var_name] = new TH2D("h_nminusone_" + p_cut_name + "_vs_" + p_second_var_name, "h_nminusone_" + p_cut_name + "_vs_" + p_second_var_name, p_nxbins, p_xmin, p_xmax, p_nybins, p_ymin, p_ymax);
+	histograms_nminusone_2D_[p_cut_name][p_second_var_name]->SetDirectory(0);
+	histograms_nminusone_2D_[p_cut_name][p_second_var_name]->Sumw2();
+	histograms_nminusone_2D_[p_cut_name][p_second_var_name]->GetXaxis()->SetTitle(p_x_axis_title);
+	histograms_nminusone_2D_[p_cut_name][p_second_var_name]->GetYaxis()->SetTitle(p_y_axis_title);
 }
 
 
@@ -198,9 +223,15 @@ inline void Cutflow::MakeCutflowHistograms(TFileService *p_fs) {
 
 inline void Cutflow::SaveNMinusOneHistogram(TFileService *p_fs) {
 	p_fs->cd();
+
 	for (auto& it_cut : cut_list_) {
 		if (histograms_nminusone_.find(it_cut) != histograms_nminusone_.end()) {
 			histograms_nminusone_[it_cut]->Write();
+		}
+		if (histograms_nminusone_2D_.find(it_cut) != histograms_nminusone_2D_.end()) {
+			for (auto& it_second : histograms_nminusone_2D_[it_cut]) {
+				(it_second.second)->Write();
+			}
 		}
 	}
 }

@@ -41,6 +41,12 @@ namespace ObjectIdentifiers {
 		kCollisionData,
 		kSimulation
 	};
+
+	enum DataType {
+		kData,
+		kSignal,
+		kBackground
+	};
 }
 
 #endif

@@ -90,6 +90,17 @@ public:
 		return event_good_;
 	}
 
+	inline bool PassCut(TString cut_name) const {
+		bool pass = false;
+		auto cut_result = cut_results_.find(cut_name);
+		if (cut_result == cut_results_.end()) {
+			std::cerr << "[EventSelector::PassCut] WARNING : PassCut requested for unknown cut " << cut_name << ". Returning false." << std::endl;
+		} else {
+			pass = (*cut_result).second;
+		}
+		return pass;
+	}
+
 private:
 	/**
 	 * Clear any data saved from the previous event
@@ -175,6 +186,15 @@ void EventSelector<T>::ProcessEvent(const T* p_event) {
 				}
 				if (pass_nminusone) {
 					histograms_nminusone_[it_cut]->Fill(return_data_[it_cut]);
+					if (histograms_nminusone_2D_.find(it_cut) != histograms_nminusone_2D_.end()) {
+						for (auto& it_second_var_hist : histograms_nminusone_2D_[it_cut]) {
+							if (return_data_.find(it_second_var_hist.first) != return_data_.end()) {
+								(it_second_var_hist.second)->Fill(return_data_[it_cut], return_data_[it_second_var_hist.first]);
+							} else {
+								std::cerr << "[EventSelector::ProcessEvent] WARNING : 2D N-1 histogram requested for " << it_cut << " vs " << it_second_var_hist.first << ", but return data was not set for the second variable." << std::endl;
+							}
+						}
+					}
 				}
 			}
 		}
