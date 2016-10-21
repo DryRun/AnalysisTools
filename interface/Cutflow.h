@@ -128,9 +128,14 @@ protected:
 
 	// Cutflow counter
 	unsigned int pass_calls_;
+	double pass_calls_weighted_;
 	std::map<TString, unsigned int> cut_counter_; // Lists number of times a given cut is failed. Map is <cut> : <total #fails>. Inclusive.
 	std::map<TString, unsigned int> cutflow_counter_; // Cutflow counter. Map is <cut> : <#fails>. Exclusive.
 	std::map<TString, unsigned int> pass_counter_; // Counts number of events that pass a given cut. Exclusive.
+	std::map<TString, double> cut_counter_weighted_; // Lists number of times a given cut is failed. Map is <cut> : <total #fails>. Inclusive.
+	std::map<TString, double> cutflow_counter_weighted_; // Cutflow counter. Map is <cut> : <#fails>. Exclusive.
+	std::map<TString, double> pass_counter_weighted_; // Counts number of events that pass a given cut. Exclusive.
+
 
 private:
 };
@@ -190,6 +195,8 @@ inline void Cutflow::MakeCutflowHistograms(TFileService *p_fs) {
 	} else {
 		h_cutflow_counter->GetYaxis()->SetTitle("Objects Remaining");
 	}
+	TH1D* h_cutflow_counter_weighted = (TH1D*)h_cutflow_counter->Clone();
+	h_cutflow_counter_weighted->SetName(TString(h_cutflow_counter_weighted->GetName()) + "_weighted");
 
 	TH1D* h_cut_counter = p_fs->make<TH1D>("CutCounter_" + name_, "CutCounter_" + name_, n_cuts + 2, -0.5, n_cuts + 2.5);
 	h_cut_counter->GetXaxis()->SetTitle("Cut Name");
@@ -202,12 +209,19 @@ inline void Cutflow::MakeCutflowHistograms(TFileService *p_fs) {
 	} else {
 		h_cut_counter->GetYaxis()->SetTitle("Objects Failing Cut");
 	}
+	TH1D* h_cut_counter_weighted = (TH1D*)h_cut_counter->Clone();
+	h_cut_counter_weighted->SetName(TString(h_cut_counter_weighted->GetName()) + "_weighted");
 
 	int bin = 1;
 	h_cutflow_counter->SetBinContent(bin, pass_calls_);
 	h_cutflow_counter->GetXaxis()->SetBinLabel(bin, "Inclusive");
 	h_cut_counter->SetBinContent(bin, pass_calls_);
 	h_cut_counter->GetXaxis()->SetBinLabel(bin, "Total");
+
+	h_cutflow_counter_weighted->SetBinContent(bin, pass_calls_weighted_);
+	h_cutflow_counter_weighted->GetXaxis()->SetBinLabel(bin, "Inclusive");
+	h_cut_counter_weighted->SetBinContent(bin, pass_calls_weighted_);
+	h_cut_counter_weighted->GetXaxis()->SetBinLabel(bin, "Total");
 	++bin;
 	for (std::vector<TString>::iterator it_cut = cut_list_.begin(); it_cut != cut_list_.end(); ++it_cut) {
 		h_cutflow_counter->SetBinContent(bin, pass_counter_[*it_cut]);
@@ -215,6 +229,12 @@ inline void Cutflow::MakeCutflowHistograms(TFileService *p_fs) {
 
 		h_cut_counter->SetBinContent(bin, cut_counter_[*it_cut]);
 		h_cut_counter->GetXaxis()->SetBinLabel(bin, *it_cut);
+		
+		h_cutflow_counter_weighted->SetBinContent(bin, pass_counter_weighted_[*it_cut]);
+		h_cutflow_counter_weighted->GetXaxis()->SetBinLabel(bin, *it_cut);
+
+		h_cut_counter_weighted->SetBinContent(bin, cut_counter_weighted_[*it_cut]);
+		h_cut_counter_weighted->GetXaxis()->SetBinLabel(bin, *it_cut);
 
 		++bin;
 	}
