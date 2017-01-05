@@ -105,9 +105,20 @@ public:
 	void MakeCutflowHistograms(TFileService *p_fs);
 
 	/**
+	 * Make cutflow histograms and save to TFile
+	 * @param p_fs [description]
+	 */
+	void MakeCutflowHistograms(TDirectory *p_directory);
+
+	/**
 	 * Save N-1 histograms to a TFileService
 	 */
-	void SaveNMinusOneHistogram(TFileService *p_fs);
+	void SaveNMinusOneHistograms(TFileService *p_fs);
+
+	/**
+	 * Save N-1 histograms to a TFileService
+	 */
+	void SaveNMinusOneHistograms(TDirectory *p_directory);
 
 private:
 
@@ -183,8 +194,13 @@ inline void Cutflow::AddNMinusOne2DHistogram(TString p_cut_name, TString p_secon
 
 
 inline void Cutflow::MakeCutflowHistograms(TFileService *p_fs) {
+	MakeCutflowHistograms(p_fs->getBareDirectory());
+}
+
+inline void Cutflow::MakeCutflowHistograms(TDirectory *p_directory) {
+	p_directory->cd();
 	Int_t n_cuts = cut_list_.size();
-	TH1D* h_cutflow_counter = p_fs->make<TH1D>("CutFlowCounter_" + name_, "CutFlowCounter_" + name_, n_cuts + 2, -0.5, n_cuts + 2.5);
+	TH1D* h_cutflow_counter = new TH1D("CutFlowCounter_" + name_, "CutFlowCounter_" + name_, n_cuts + 2, -0.5, n_cuts + 2.5);
 	h_cutflow_counter->GetXaxis()->SetTitle("Cut Name");
 	if (object_name_ != "") {
 		if (object_name_ == "Vertex") {
@@ -198,7 +214,7 @@ inline void Cutflow::MakeCutflowHistograms(TFileService *p_fs) {
 	TH1D* h_cutflow_counter_weighted = (TH1D*)h_cutflow_counter->Clone();
 	h_cutflow_counter_weighted->SetName(TString(h_cutflow_counter_weighted->GetName()) + "_weighted");
 
-	TH1D* h_cut_counter = p_fs->make<TH1D>("CutCounter_" + name_, "CutCounter_" + name_, n_cuts + 2, -0.5, n_cuts + 2.5);
+	TH1D* h_cut_counter = new TH1D("CutCounter_" + name_, "CutCounter_" + name_, n_cuts + 2, -0.5, n_cuts + 2.5);
 	h_cut_counter->GetXaxis()->SetTitle("Cut Name");
 	if (object_name_ != "") {
 		if (object_name_ == "Vertex") {
@@ -238,11 +254,18 @@ inline void Cutflow::MakeCutflowHistograms(TFileService *p_fs) {
 
 		++bin;
 	}
-
+	h_cutflow_counter->Write();
+	h_cutflow_counter_weighted->Write();
+	h_cut_counter->Write();
+	h_cut_counter_weighted->Write();
 }
 
-inline void Cutflow::SaveNMinusOneHistogram(TFileService *p_fs) {
-	p_fs->cd();
+inline void Cutflow::SaveNMinusOneHistograms(TFileService *p_fs) {
+	SaveNMinusOneHistograms(p_fs->getBareDirectory());
+}
+
+inline void Cutflow::SaveNMinusOneHistograms(TDirectory *p_directory) {
+	p_directory->cd();
 
 	for (auto& it_cut : cut_list_) {
 		if (histograms_nminusone_.find(it_cut) != histograms_nminusone_.end()) {

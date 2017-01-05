@@ -8,10 +8,10 @@
 #include "TString.h"
 
 //#include "FWCore/Framework/interface/EDAnalyzer.h"
-#include "FWCore/Framework/interface/Event.h"
+//#include "FWCore/Framework/interface/Event.h"
 //#include "DataFormats/VertexReco/interface/Vertex.h"
-#include "DataFormats/PatCandidates/interface/Electron.h"
-#include "DataFormats/PatCandidates/interface/Jet.h"
+//#include "DataFormats/PatCandidates/interface/Electron.h"
+//#include "DataFormats/PatCandidates/interface/Jet.h"
 
 #include "MyTools/AnalysisTools/interface/ObjectTypeEnums.h"
 #include "MyTools/AnalysisTools/interface/ObjectSelector.h"
@@ -32,8 +32,9 @@ public:
 
 	/**
 	 * Setup map from cuts to cut functions
+	 * Moved to the cut function definition file!
 	 */
-	void Configure();
+	//void Configure();
 
 	/**
 	 * Add a CutFunction to the index
