@@ -37,9 +37,21 @@ namespace ObjectIdentifiers {
 		kGen
 	};
 
+	enum BTagWP {
+		kCSVL,
+		kCSVM,
+		kCSVT
+	};
+
 	enum DataSource {
 		kCollisionData,
 		kSimulation
+	};
+
+	enum DataType {
+		kData,
+		kSignal,
+		kBackground
 	};
 }
 

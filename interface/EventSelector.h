@@ -8,10 +8,10 @@
 #include "TString.h"
 
 //#include "FWCore/Framework/interface/EDAnalyzer.h"
-#include "FWCore/Framework/interface/Event.h"
+//#include "FWCore/Framework/interface/Event.h"
 //#include "DataFormats/VertexReco/interface/Vertex.h"
-#include "DataFormats/PatCandidates/interface/Electron.h"
-#include "DataFormats/PatCandidates/interface/Jet.h"
+//#include "DataFormats/PatCandidates/interface/Electron.h"
+//#include "DataFormats/PatCandidates/interface/Jet.h"
 
 #include "MyTools/AnalysisTools/interface/ObjectTypeEnums.h"
 #include "MyTools/AnalysisTools/interface/ObjectSelector.h"
@@ -32,8 +32,9 @@ public:
 
 	/**
 	 * Setup map from cuts to cut functions
+	 * Moved to the cut function definition file!
 	 */
-	void Configure();
+	//void Configure();
 
 	/**
 	 * Add a CutFunction to the index
@@ -84,10 +85,21 @@ public:
 		return event_;
 	}
 
-	void ProcessEvent(const T* p_event);
+	void ProcessEvent(const T* p_event, double p_weight = 1);
 
 	inline bool Pass() {
 		return event_good_;
+	}
+
+	inline bool PassCut(TString cut_name) const {
+		bool pass = false;
+		auto cut_result = cut_results_.find(cut_name);
+		if (cut_result == cut_results_.end()) {
+			std::cerr << "[EventSelector::PassCut] WARNING : PassCut requested for unknown cut " << cut_name << ". Returning false." << std::endl;
+		} else {
+			pass = (*cut_result).second;
+		}
+		return pass;
 	}
 
 private:
@@ -141,10 +153,11 @@ void EventSelector<T>::RegisterCut(TString p_cut_name, std::vector<TString> p_cu
 }
 
 template<class T>
-void EventSelector<T>::ProcessEvent(const T* p_event) {
+void EventSelector<T>::ProcessEvent(const T* p_event, double p_weight) {
 	Reset();
 	event_ = p_event;
 	++pass_calls_;
+	pass_calls_weighted_ += p_weight;
 	bool this_pass = true;
 	for (auto & it_cut : cut_list_) {
 		cut_results_[it_cut] = cut_functions_[it_cut](*event_, this);
@@ -152,11 +165,14 @@ void EventSelector<T>::ProcessEvent(const T* p_event) {
 			if (this_pass) {
 				this_pass = false;
 				cutflow_counter_[it_cut]++;
+				cutflow_counter_weighted_[it_cut] += p_weight;
 			}
 			cut_counter_[it_cut]++;
+			cut_counter_weighted_[it_cut] += p_weight;
 		}
 		if (this_pass) {
 			pass_counter_[it_cut]++;
+			pass_counter_weighted_[it_cut] += p_weight;
 		}
 	}
 	event_good_ = this_pass;
@@ -175,6 +191,15 @@ void EventSelector<T>::ProcessEvent(const T* p_event) {
 				}
 				if (pass_nminusone) {
 					histograms_nminusone_[it_cut]->Fill(return_data_[it_cut]);
+					if (histograms_nminusone_2D_.find(it_cut) != histograms_nminusone_2D_.end()) {
+						for (auto& it_second_var_hist : histograms_nminusone_2D_[it_cut]) {
+							if (return_data_.find(it_second_var_hist.first) != return_data_.end()) {
+								(it_second_var_hist.second)->Fill(return_data_[it_cut], return_data_[it_second_var_hist.first]);
+							} else {
+								std::cerr << "[EventSelector::ProcessEvent] WARNING : 2D N-1 histogram requested for " << it_cut << " vs " << it_second_var_hist.first << ", but return data was not set for the second variable." << std::endl;
+							}
+						}
+					}
 				}
 			}
 		}

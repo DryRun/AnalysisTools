@@ -30,18 +30,13 @@ public:
 	~ObjectSelector();
 
 	/**
-	 * Add a CutFunction to the index of known cut functions. This should be done in the "Configure" function in the same file that implements the cut function.
-	 * @param p_cut_name     Name of cut
-	 * @param p_cut_function CutFunction pointer thingy
-	 */
-	 void AddCutFunction(TString p_cut_name, CutFunction p_cut_function);
-
-	/**
 	 * Configure the object selector. Defined explicitly for objects T, to create the correct map of cut functions.
 	 * @return	true if everything succeeded
 	 */
 	//bool Configure();
 	
+	 void AddCutFunction(TString p_cut_name, CutFunction p_cut_function);
+
 	/**
 	 * Make sure the cut exists in the cut index, then register it with Cutflow::RegisterCut.
 	 * @param p_cut_name        Name
@@ -64,9 +59,6 @@ public:
 		object_ = p_object;
 	}
 
-	inline void SetObject(ObjectIdentifiers::ObjectType p_object) {
-		object_ = p_object;
-	}
 
 private:
 	/**
@@ -121,6 +113,7 @@ template<class T>
 void ObjectSelector<T>::AddCutFunction(TString p_cut_name, CutFunction p_cut_function) {
 	cut_functions_[p_cut_name] = p_cut_function;
 }
+
 
 template<class T>
 void ObjectSelector<T>::RegisterCut(TString p_cut_name, std::vector<TString> p_cut_descriptors, std::vector<double> p_cut_parameters) {
