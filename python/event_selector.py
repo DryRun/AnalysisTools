@@ -6,7 +6,7 @@ from cutflow import Cutflow
 # Specialization of Cutflow to event selection. 
 class EventSelector(Cutflow):
 	def __init__(self, name="UnnamedEventSelector"):
-		super(EventSelector, self).__init__()
+		super(EventSelector, self).__init__(name)
 		self._event = None
 		self._object_selectors = {}
 		self._event_pass = False
