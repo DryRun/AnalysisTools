@@ -13,16 +13,9 @@
 
 #include "MyTools/AnalysisTools/interface/EventSelector.h"
 
-class EventSelector;
+template class EventSelector<edm::Event>;
 
 namespace EventCutFunctions {
-	bool VertexMinTracks(EventSelector* p_event_selector);
-	bool VertexMinNdof(EventSelector* p_event_selector);
-	bool VertexMaxAbsZ(EventSelector* p_event_selector);
-	bool VertexMaxRho(EventSelector* p_event_selector);
-	bool ExactNJets(EventSelector* p_event_selector);
-	bool MinNJets(EventSelector* p_event_selector);
-	bool MaxNJets(EventSelector* p_event_selector);
 
 }
 

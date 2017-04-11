@@ -42,8 +42,6 @@ public:
 	 */
 	//bool Configure();
 	
-	 void AddCutFunction(TString p_cut_name, CutFunction p_cut_function);
-
 	/**
 	 * Make sure the cut exists in the cut index, then register it with Cutflow::RegisterCut.
 	 * @param p_cut_name        Name
@@ -57,44 +55,13 @@ public:
 	 * @param p_data edm::Handle to the data.
 	 */
 	void ClassifyObjects(const std::vector<T>& p_data);
-<<<<<<< HEAD
-
-	/**
-	 * Get number of objects passing selection
-	 * @return Number of objects passing selection
-	 */
-	inline int GetNumberOfGoodObjects() {
-		return obj_good_.size();
-	}
-
-	/**
-	 * Get map of whether each object passes selection
-	 */
-	inline std::map<int, bool>& GetGoodObjectMap() {
-		return obj_pass_;
-	}
-
-	inline std::vector<int>& GetGoodObjectIndices() {
-		return obj_good_;
-	}
-
-	inline bool GetObjectPass(int p_index) {
-		return obj_pass_[p_index];
-	}
-=======
->>>>>>> origin/CMSSW_5_X_Y
 
 	inline const ObjectIdentifiers::ObjectType GetObjectType() {
 		return object_;
 	}
 
-<<<<<<< HEAD
-	inline const std::vector<T>* GetData() {
-		return data_;
-=======
 	inline void SetObjectType(ObjectIdentifiers::ObjectType p_object) {
 		object_ = p_object;
->>>>>>> origin/CMSSW_5_X_Y
 	}
 
 	inline void SetObject(ObjectIdentifiers::ObjectType p_object) {
@@ -119,17 +86,10 @@ public:
 private:
 	ObjectIdentifiers::ObjectType object_;
 	const std::vector<T>* data_;
-<<<<<<< HEAD
-	std::map<int, bool> obj_pass_;
-	std::vector<int> obj_good_;
-
-};
-=======
 
 };
 //template <> bool ObjectSelector<edm::Handle<std::vector<pat::Jet> > >::Configure();
 //template <> bool ObjectSelector<edm::Handle<std::vector<pat::Electron> > >::Configure();
->>>>>>> origin/CMSSW_5_X_Y
 
 template<class T>
 ObjectSelector<T>::ObjectSelector() {
@@ -139,8 +99,6 @@ ObjectSelector<T>::ObjectSelector() {
 template<class T>
 ObjectSelector<T>::~ObjectSelector() {}
 
-<<<<<<< HEAD
-=======
 //template <> bool ObjectSelector<pat::Jet>::Configure() {
 //	cut_functions_["MinPt"] = &JetCutFunctions::MinPt;
 //	cut_functions_["MaxAbsEta"] = &JetCutFunctions::MaxAbsEta;
@@ -159,16 +117,11 @@ ObjectSelector<T>::~ObjectSelector() {}
 //	return true;
 //}
 
->>>>>>> origin/CMSSW_5_X_Y
 template<class T>
 void ObjectSelector<T>::AddCutFunction(TString p_cut_name, CutFunction p_cut_function) {
 	cut_functions_[p_cut_name] = p_cut_function;
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/CMSSW_5_X_Y
 template<class T>
 void ObjectSelector<T>::RegisterCut(TString p_cut_name, std::vector<TString> p_cut_descriptors, std::vector<double> p_cut_parameters) {
 	if (cut_functions_.find(p_cut_name) == cut_functions_.end()) {
@@ -189,10 +142,7 @@ void ObjectSelector<T>::ClassifyObjects(const std::vector<T>& p_data) {
 			obj_good_.push_back(i);
 		}
 	}
-<<<<<<< HEAD
-=======
 	n_obj_ = p_data.size();
->>>>>>> origin/CMSSW_5_X_Y
 }
 
 template<class T>
@@ -219,9 +169,5 @@ void ObjectSelector<T>::Reset() {
 	obj_pass_.clear();
 	obj_good_.clear();
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/CMSSW_5_X_Y
 
 #endif
