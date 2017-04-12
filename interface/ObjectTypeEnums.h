@@ -8,6 +8,8 @@ namespace ObjectIdentifiers {
 		kMuon,
 		kTau,
 		kJet,
+		kPFJet,
+		kCaloJet,
 		kW,
 		kZ,
 		kHiggs,
@@ -22,6 +24,34 @@ namespace ObjectIdentifiers {
 		kNumerator,
 		kDenominator,
 		kUnspecified
+	};
+
+	enum JetAlgorithm {
+		kAK5,
+		kAK7
+	};
+
+	enum JetType {
+		kCalo,
+		kPF,
+		kGen
+	};
+
+	enum BTagWP {
+		kCSVL,
+		kCSVM,
+		kCSVT
+	};
+
+	enum DataSource {
+		kCollisionData,
+		kSimulation
+	};
+
+	enum DataType {
+		kData,
+		kSignal,
+		kBackground
 	};
 }
 

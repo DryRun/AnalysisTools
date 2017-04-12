@@ -13,9 +13,11 @@
 
 #include "MyTools/AnalysisTools/interface/Cutflow.h"
 #include "MyTools/AnalysisTools/interface/ObjectTypeEnums.h"
+#include "MyTools/AnalysisTools/interface/ObjectSelectorResults.h"
+
 
 template <class T>
-class ObjectSelector : public Cutflow {
+class ObjectSelector : public Cutflow, public ObjectSelectorResults {
 public:
 	// Index of cut functions
 	#ifndef __CINT__
@@ -28,17 +30,12 @@ public:
 	~ObjectSelector();
 
 	/**
-	 * Add a CutFunction to the index of known cut functions. This should be done in the "Configure" function in the same file that implements the cut function.
-	 * @param p_cut_name     Name of cut
-	 * @param p_cut_function CutFunction pointer thingy
-	 */
-	 void AddCutFunction(TString p_cut_name, CutFunction p_cut_function);
-
-	/**
 	 * Configure the object selector. Defined explicitly for objects T, to create the correct map of cut functions.
 	 * @return	true if everything succeeded
 	 */
-	bool Configure();
+	//bool Configure();
+	
+	 void AddCutFunction(TString p_cut_name, CutFunction p_cut_function);
 
 	/**
 	 * Make sure the cut exists in the cut index, then register it with Cutflow::RegisterCut.
@@ -54,40 +51,14 @@ public:
 	 */
 	void ClassifyObjects(const std::vector<T>& p_data);
 
-	/**
-	 * Get number of objects passing selection
-	 * @return Number of objects passing selection
-	 */
-	inline int GetNumberOfGoodObjects() {
-		return obj_good_.size();
-	}
-
-	/**
-	 * Get map of whether each object passes selection
-	 */
-	inline std::map<int, bool>& GetGoodObjectMap() {
-		return obj_pass_;
-	}
-
-	inline std::vector<int>& GetGoodObjectIndices() {
-		return obj_good_;
-	}
-
-	inline bool GetObjectPass(int p_index) {
-		return obj_pass_[p_index];
-	}
-
 	inline const ObjectIdentifiers::ObjectType GetObjectType() {
 		return object_;
 	}
 
-	inline const std::vector<T>* GetData() {
-		return data_;
-	}
-
-	inline void SetObject(ObjectIdentifiers::ObjectType p_object) {
+	inline void SetObjectType(ObjectIdentifiers::ObjectType p_object) {
 		object_ = p_object;
 	}
+
 
 private:
 	/**
@@ -107,10 +78,10 @@ public:
 private:
 	ObjectIdentifiers::ObjectType object_;
 	const std::vector<T>* data_;
-	std::map<int, bool> obj_pass_;
-	std::vector<int> obj_good_;
 
 };
+//template <> bool ObjectSelector<edm::Handle<std::vector<pat::Jet> > >::Configure();
+//template <> bool ObjectSelector<edm::Handle<std::vector<pat::Electron> > >::Configure();
 
 template<class T>
 ObjectSelector<T>::ObjectSelector() {
@@ -120,10 +91,29 @@ ObjectSelector<T>::ObjectSelector() {
 template<class T>
 ObjectSelector<T>::~ObjectSelector() {}
 
+//template <> bool ObjectSelector<pat::Jet>::Configure() {
+//	cut_functions_["MinPt"] = &JetCutFunctions::MinPt;
+//	cut_functions_["MaxAbsEta"] = &JetCutFunctions::MaxAbsEta;
+//
+//	object_ = ObjectIdentifiers::kJet;
+//	SetName("DefaultJetSelection");
+//	SetObjectName("Jet");
+//	return true;
+//}
+
+//template <> bool ObjectSelector<pat::Electron>::Configure() {
+//	cut_functions_["MinPt"] = &ElectronCutFunctions::MinPt;
+//	object_ = ObjectIdentifiers::kElectron;
+//	SetName("DefaultElectronSelection");
+//	SetObjectName("Electron");
+//	return true;
+//}
+
 template<class T>
 void ObjectSelector<T>::AddCutFunction(TString p_cut_name, CutFunction p_cut_function) {
 	cut_functions_[p_cut_name] = p_cut_function;
 }
+
 
 template<class T>
 void ObjectSelector<T>::RegisterCut(TString p_cut_name, std::vector<TString> p_cut_descriptors, std::vector<double> p_cut_parameters) {
@@ -145,6 +135,7 @@ void ObjectSelector<T>::ClassifyObjects(const std::vector<T>& p_data) {
 			obj_good_.push_back(i);
 		}
 	}
+	n_obj_ = p_data.size();
 }
 
 template<class T>
@@ -171,6 +162,5 @@ void ObjectSelector<T>::Reset() {
 	obj_pass_.clear();
 	obj_good_.clear();
 }
-
 
 #endif
